@@ -11,18 +11,13 @@ public class InteraccionConObjetoAlternable : MonoBehaviour
 
     private GameObject objetoActivo;
     private bool estadoTapado = true;
-    private bool enZona = false;
 
     void Start()
     {
-        if (mensajeUI == null)
-        {
-            Debug.LogError("mensajeUI no está asignado.");
-        }
-        else
-        {
+        if (mensajeUI != null)
             mensajeUI.gameObject.SetActive(false);
-        }
+        else
+            Debug.LogError("mensajeUI no está asignado.");
 
         if (prefabTapado != null && puntoSpawn != null)
         {
@@ -32,37 +27,32 @@ public class InteraccionConObjetoAlternable : MonoBehaviour
         }
     }
 
-    void Update()
+    private void OnTriggerStay2D(Collider2D other)
     {
-        if (enZona && objetoActivo != null && Input.GetKeyDown(teclaInteraccion))
+        if (other.CompareTag("Player") && objetoActivo != null)
         {
-            Quaternion rot = objetoActivo.transform.rotation;
-            Vector3 escala = objetoActivo.transform.localScale;
+            if (!mensajeUI.gameObject.activeSelf)
+                MostrarMensaje();
 
-            Destroy(objetoActivo);
-            objetoActivo = null;
+            if (Input.GetKeyDown(teclaInteraccion))
+            {
+                Quaternion rot = objetoActivo.transform.rotation;
+                Vector3 escala = objetoActivo.transform.localScale;
 
-            estadoTapado = !estadoTapado;
+                Destroy(objetoActivo);
+                estadoTapado = !estadoTapado;
 
-            GameObject nuevo = Instantiate(
-                estadoTapado ? prefabTapado : prefabLleno,
-                puntoSpawn.position,
-                rot
-            );
-            nuevo.transform.localScale = escala;
-            nuevo.tag = "InodoroInteractuable";
-            objetoActivo = nuevo;
+                GameObject nuevo = Instantiate(
+                    estadoTapado ? prefabTapado : prefabLleno,
+                    puntoSpawn.position,
+                    rot
+                );
+                nuevo.transform.localScale = escala;
+                nuevo.tag = "InodoroInteractuable";
+                objetoActivo = nuevo;
 
-            MostrarMensaje();
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            enZona = true;
-            MostrarMensaje();
+                MostrarMensaje();
+            }
         }
     }
 
@@ -70,7 +60,6 @@ public class InteraccionConObjetoAlternable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            enZona = false;
             if (mensajeUI != null)
                 mensajeUI.gameObject.SetActive(false);
         }
