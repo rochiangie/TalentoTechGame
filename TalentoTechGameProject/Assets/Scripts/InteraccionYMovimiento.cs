@@ -1,23 +1,21 @@
 using UnityEngine;
-using TMPro;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator), typeof(Collider2D))]
 public class InteraccionYMovimiento : MonoBehaviour
 {
     [Header("Movimiento")]
     public float velocidadMovimiento = 5f;
-    private Rigidbody2D rb;
-    private Animator animator;
-    private Vector2 direccionMovimiento;
 
-    [Header("Interacción")]
-    public TextMeshProUGUI mensajeUI;
+    [Header("InteracciÃ³n")]
     public GameObject prefabTapado;
     public GameObject prefabLleno;
     public Transform puntoSpawn;
     public KeyCode teclaInteraccion = KeyCode.E;
-    [SerializeField] private LayerMask capaInteractuable; // Nueva capa para filtrado
+    public GameObject textoInteraccion;
 
+    private Rigidbody2D rb;
+    private Animator animator;
+    private Vector2 direccionMovimiento;
     private GameObject objetoActivo;
     private bool estadoTapado = true;
     private bool puedeInteractuar = false;
@@ -27,30 +25,18 @@ public class InteraccionYMovimiento : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 
-        // Configuración mejorada del Rigidbody
+        // ConfiguraciÃ³n Ã³ptima del Rigidbody
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-
-        // Asegurar que existe Collider2D
-        if (GetComponent<Collider2D>() == null)
-        {
-            gameObject.AddComponent<BoxCollider2D>();
-        }
+        rb.freezeRotation = true;
     }
 
     void Start()
     {
-        if (mensajeUI != null)
-            mensajeUI.gameObject.SetActive(false);
-        else
-            Debug.LogWarning("mensajeUI no está asignado.");
+        if (textoInteraccion != null)
+            textoInteraccion.SetActive(false);
 
-        if (prefabTapado != null && puntoSpawn != null)
-        {
-            objetoActivo = Instantiate(prefabTapado, puntoSpawn.position, Quaternion.identity);
-            ConfigurarObjetoInteractuable(objetoActivo);
-            estadoTapado = true;
-        }
+        CrearObjetoInteractuableInicial();
     }
 
     void Update()
@@ -61,7 +47,41 @@ public class InteraccionYMovimiento : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + direccionMovimiento.normalized * velocidadMovimiento * Time.fixedDeltaTime);
+        rb.linearVelocity = direccionMovimiento.normalized * velocidadMovimiento;
+    }
+
+    private void CrearObjetoInteractuableInicial()
+    {
+        if (prefabTapado != null && puntoSpawn != null)
+        {
+            objetoActivo = Instantiate(prefabTapado, puntoSpawn.position, Quaternion.identity);
+            ConfigurarObjetoInteractuable(objetoActivo);
+            estadoTapado = true;
+        }
+    }
+
+    private void ConfigurarObjetoInteractuable(GameObject obj)
+    {
+        if (obj == null) return;
+
+        obj.tag = "InodoroInteractuable";
+
+        // Asegurar Collider2D
+        var collider = obj.GetComponent<Collider2D>();
+        if (collider == null)
+        {
+            collider = obj.AddComponent<BoxCollider2D>();
+        }
+        collider.isTrigger = true;
+
+        // Asegurar Rigidbody2D
+        var rbObj = obj.GetComponent<Rigidbody2D>();
+        if (rbObj == null)
+        {
+            rbObj = obj.AddComponent<Rigidbody2D>();
+        }
+        rbObj.isKinematic = true;
+        rbObj.simulated = true;
     }
 
     private void ProcesarMovimiento()
@@ -73,15 +93,17 @@ public class InteraccionYMovimiento : MonoBehaviour
 
         if (direccionMovimiento.x != 0)
         {
-            Vector3 escala = transform.localScale;
-            escala.x = Mathf.Abs(escala.x) * Mathf.Sign(direccionMovimiento.x);
-            transform.localScale = escala;
+            transform.localScale = new Vector3(
+                Mathf.Sign(direccionMovimiento.x) * Mathf.Abs(transform.localScale.x),
+                transform.localScale.y,
+                transform.localScale.z
+            );
         }
     }
 
     private void ProcesarInteraccion()
     {
-        if (puedeInteractuar && objetoActivo != null && Input.GetKeyDown(teclaInteraccion))
+        if (puedeInteractuar && Input.GetKeyDown(teclaInteraccion))
         {
             InteractuarConObjeto();
         }
@@ -89,48 +111,31 @@ public class InteraccionYMovimiento : MonoBehaviour
 
     private void InteractuarConObjeto()
     {
-        Quaternion rot = objetoActivo.transform.rotation;
+        if (objetoActivo == null) return;
+
+        Quaternion rotacion = objetoActivo.transform.rotation;
         Vector3 escala = objetoActivo.transform.localScale;
 
         Destroy(objetoActivo);
         estadoTapado = !estadoTapado;
 
-        GameObject nuevo = Instantiate(
+        objetoActivo = Instantiate(
             estadoTapado ? prefabTapado : prefabLleno,
             puntoSpawn.position,
-            rot
+            rotacion
         );
 
-        ConfigurarObjetoInteractuable(nuevo);
-        objetoActivo = nuevo;
-
-        MostrarMensaje();
-    }
-
-    private void ConfigurarObjetoInteractuable(GameObject obj)
-    {
-        obj.tag = "InodoroInteractuable";
-
-        // Asegurar componentes de física
-        var collider = obj.GetComponent<Collider2D>();
-        if (collider == null)
-        {
-            collider = obj.AddComponent<BoxCollider2D>();
-        }
-        collider.isTrigger = true;
-
-        if (obj.GetComponent<Rigidbody2D>() == null)
-        {
-            var rbObj = obj.AddComponent<Rigidbody2D>();
-            rbObj.isKinematic = true;
-        }
+        ConfigurarObjetoInteractuable(objetoActivo);
+        ActualizarInterfaz();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("InodoroInteractuable"))
         {
-            SetObjetoActivo(other.gameObject);
+            objetoActivo = other.gameObject;
+            puedeInteractuar = true;
+            ActualizarInterfaz();
         }
     }
 
@@ -138,62 +143,16 @@ public class InteraccionYMovimiento : MonoBehaviour
     {
         if (other.CompareTag("InodoroInteractuable"))
         {
-            ClearObjetoActivo();
+            puedeInteractuar = false;
+            ActualizarInterfaz();
         }
     }
 
-    public void SetObjetoActivo(GameObject nuevo)
+    private void ActualizarInterfaz()
     {
-        if (nuevo == null || objetoActivo == nuevo) return;
-
-        objetoActivo = nuevo;
-        puedeInteractuar = true;
-        MostrarMensaje();
-    }
-
-    public void ClearObjetoActivo()
-    {
-        puedeInteractuar = false;
-        objetoActivo = null;
-
-        if (mensajeUI != null)
-            mensajeUI.gameObject.SetActive(false);
-    }
-
-    private void MostrarMensaje()
-    {
-        if (mensajeUI != null)
+        if (textoInteraccion != null)
         {
-            mensajeUI.text = estadoTapado ? "Presioná E para destapar" : "Presioná E para tapar";
-            mensajeUI.gameObject.SetActive(true);
+            textoInteraccion.SetActive(puedeInteractuar);
         }
-    }
-
-    // Método opcional para debuggear el rango de interacción
-    private void OnDrawGizmosSelected()
-    {
-        Collider2D collider = GetComponent<Collider2D>();
-        if (collider == null) return;
-
-        Gizmos.color = new Color(0, 1, 0, 0.3f);
-
-        // Para BoxCollider2D
-        BoxCollider2D boxCollider = collider as BoxCollider2D;
-        if (boxCollider != null)
-        {
-            Gizmos.DrawCube(transform.position + (Vector3)boxCollider.offset, boxCollider.size);
-            return;
-        }
-
-        // Para CircleCollider2D
-        CircleCollider2D circleCollider = collider as CircleCollider2D;
-        if (circleCollider != null)
-        {
-            Gizmos.DrawSphere(transform.position + (Vector3)circleCollider.offset, circleCollider.radius);
-            return;
-        }
-
-        // Para otros tipos de colliders
-        Gizmos.DrawWireCube(transform.position, Vector3.one);
     }
 }
