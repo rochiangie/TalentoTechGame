@@ -8,8 +8,10 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private float velocidadCaminata = 5f;
     [SerializeField] private float velocidadCarrera = 8f;
     [SerializeField] private float fuerzaSalto = 12f;
+    [SerializeField] private float fuerzaDobleSalto = 15f;
     [SerializeField] private string tagSuelo = "Suelo";
     [SerializeField] private string tagMuerte = "Muerte";
+    [SerializeField] private string tagImpulso = "Jump";
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -26,7 +28,7 @@ public class MovimientoJugador : MonoBehaviour
     {
         if (estaMuerto) return;
 
-        // Salto
+        // Salto manual solo si está en el suelo
         if (Input.GetButtonDown("Jump") && enSuelo)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, fuerzaSalto);
@@ -42,7 +44,7 @@ public class MovimientoJugador : MonoBehaviour
 
         // Movimiento horizontal
         float inputX = Input.GetAxisRaw("Horizontal");
-        bool corriendo = Input.GetKey(KeyCode.LeftShift);
+        bool corriendo = Input.GetKey(KeyCode.R); // correr con R
         float velocidad = corriendo ? velocidadCarrera : velocidadCaminata;
 
         rb.linearVelocity = new Vector2(inputX * velocidad, rb.linearVelocity.y);
@@ -67,6 +69,12 @@ public class MovimientoJugador : MonoBehaviour
         if (collision.collider.CompareTag(tagMuerte))
         {
             Morir();
+        }
+
+        if (collision.collider.CompareTag(tagImpulso))
+        {
+            // Impulso automático al tocar una plataforma con tag "Jump"
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, fuerzaDobleSalto);
         }
     }
 
