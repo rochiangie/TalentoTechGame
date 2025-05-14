@@ -13,6 +13,9 @@ TagManager:
   - InodoroTapado
   - InodoroLleno
   - InodoroInteractuable
+  - Lavamanos
+  - "Ba\xF1era"
+  - Inodoro
   layers:
   - Default
   - TransparentFX

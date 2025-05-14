@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5445888085933735828}
   - component: {fileID: 3972155404967694167}
   - component: {fileID: 2816894860548464101}
-  m_Layer: 0
-  m_Name: InodoroLleno
-  m_TagString: InodoroLleno
+  m_Layer: 3
+  m_Name: inodoroLleno
+  m_TagString: Inodoro
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
