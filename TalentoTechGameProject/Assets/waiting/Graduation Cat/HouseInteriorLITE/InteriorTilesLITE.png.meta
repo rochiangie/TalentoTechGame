@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 21e3c758fa9bdcb4aa723aa1d453af74
+AssetOrigin:
+  serializedVersion: 1
+  productId: 307715
+  packageName: House Interior Tileset 32x32 LITE
+  packageVersion: 1.0
+  assetPath: Assets/waiting/Graduation Cat/HouseInteriorLITE/InteriorTilesLITE.png
+  uploadId: 723420
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -264,6 +271,32 @@ TextureImporter:
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -3007,9 +3040,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 96
-        y: 160
+        y: 130
         width: 32
-        height: 32
+        height: 62
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -3645,9 +3678,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 96
-        y: 96
-        width: 32
-        height: 32
+        y: 66
+        width: 33
+        height: 62
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -3931,11 +3964,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 96
-        y: 64
+        y: 66
         width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.51672626}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -3955,7 +3988,7 @@ TextureImporter:
         x: 128
         y: 64
         width: 32
-        height: 32
+        height: 63
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -4755,10 +4788,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 307715
-  packageName: House Interior Tileset 32x32 LITE
-  packageVersion: 1.0
-  assetPath: Assets/waiting/Graduation Cat/HouseInteriorLITE/InteriorTilesLITE.png
-  uploadId: 723420

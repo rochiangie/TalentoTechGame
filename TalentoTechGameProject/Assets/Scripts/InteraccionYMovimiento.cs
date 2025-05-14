@@ -4,25 +4,24 @@ using TMPro;
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator), typeof(Collider2D))]
 public class InteraccionYMovimiento : MonoBehaviour
 {
-    [Header("Movimiento")]
+    [Header("Configuración Básica")]
     public float velocidadMovimiento = 5f;
-
-    [Header("Configuración Interacción")]
     public KeyCode teclaInteraccion = KeyCode.E;
     public TextMeshProUGUI textoInteraccion;
-    public float rangoDeteccion = 1.5f;
+    public float rangoInteraccion = 1.5f;
+    public LayerMask capaInteractuable;
 
-    [Header("Inodoro")]
+    [Header("Prefabs Inodoro")]
     public GameObject inodoroTapadoPrefab;
     public GameObject inodoroLlenoPrefab;
     public Transform spawnInodoro;
 
-    [Header("Bañera")]
+    [Header("Prefabs Bañera")]
     public GameObject bañeraVaciaPrefab;
     public GameObject bañeraLlenaPrefab;
     public Transform spawnBañera;
 
-    [Header("Lavamanos")]
+    [Header("Prefabs Lavamanos")]
     public GameObject lavamanosVacioPrefab;
     public GameObject lavamanosLlenoPrefab;
     public Transform spawnLavamanos;
@@ -43,21 +42,10 @@ public class InteraccionYMovimiento : MonoBehaviour
         rb.freezeRotation = true;
     }
 
-    void Start()
-    {
-        if (textoInteraccion != null)
-            textoInteraccion.gameObject.SetActive(false);
-    }
-
     void Update()
     {
         ProcesarMovimiento();
-        DetectarObjetosCercanos();
-
-        if (puedeInteractuar && Input.GetKeyDown(teclaInteraccion))
-        {
-            InteractuarConObjeto();
-        }
+        VerificarInteraccion();
     }
 
     void FixedUpdate()
@@ -82,126 +70,105 @@ public class InteraccionYMovimiento : MonoBehaviour
         }
     }
 
-    private void DetectarObjetosCercanos()
+    private void VerificarInteraccion()
     {
-        Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, rangoDeteccion);
-        GameObject objetoMasCercano = null;
-        float distanciaMinima = Mathf.Infinity;
+        Collider2D[] objetosCercanos = Physics2D.OverlapCircleAll(transform.position, rangoInteraccion, capaInteractuable);
+        bool interaccionDisponible = false;
 
-        foreach (Collider2D col in objetos)
+        foreach (Collider2D col in objetosCercanos)
         {
             if (col.CompareTag("Inodoro") || col.CompareTag("Bañera") || col.CompareTag("Lavamanos"))
             {
-                float distancia = Vector2.Distance(transform.position, col.transform.position);
-                if (distancia < distanciaMinima)
-                {
-                    distanciaMinima = distancia;
-                    objetoMasCercano = col.gameObject;
-                }
+                objetoActual = col.gameObject;
+                interaccionDisponible = true;
+                break;
             }
         }
 
-        objetoActual = objetoMasCercano;
-        puedeInteractuar = (objetoActual != null);
-        ActualizarInterfaz();
+        puedeInteractuar = interaccionDisponible;
+        ActualizarUI();
+
+        if (puedeInteractuar && Input.GetKeyDown(teclaInteraccion))
+        {
+            ManejarInteraccion();
+        }
     }
 
-    private void InteractuarConObjeto()
+    private void ManejarInteraccion()
     {
         if (objetoActual == null) return;
 
-        // Determinar qué objeto es y su configuración
+        string tag = objetoActual.tag;
+        bool estadoActual = objetoActual.name.Contains("Lleno") || objetoActual.name.Contains("Llena");
+
+        Vector3 posicionSpawn = Vector3.zero;
         GameObject prefabAlternativo = null;
-        Transform spawnPoint = null;
 
-        if (objetoActual.CompareTag("Inodoro"))
+        switch (tag)
         {
-            bool estaTapado = objetoActual.name.Contains("Tapado");
-            prefabAlternativo = estaTapado ? inodoroLlenoPrefab : inodoroTapadoPrefab;
-            spawnPoint = spawnInodoro;
-        }
-        else if (objetoActual.CompareTag("Bañera"))
-        {
-            bool estaLlena = objetoActual.name.Contains("Llena");
-            prefabAlternativo = estaLlena ? bañeraVaciaPrefab : bañeraLlenaPrefab;
-            spawnPoint = spawnBañera;
-        }
-        else if (objetoActual.CompareTag("Lavamanos"))
-        {
-            bool estaLleno = objetoActual.name.Contains("Lleno");
-            prefabAlternativo = estaLleno ? lavamanosVacioPrefab : lavamanosLlenoPrefab;
-            spawnPoint = spawnLavamanos;
+            case "Inodoro":
+                posicionSpawn = spawnInodoro.position;
+                prefabAlternativo = estadoActual ? inodoroTapadoPrefab : inodoroLlenoPrefab;
+                break;
+            case "Bañera":
+                posicionSpawn = spawnBañera.position;
+                prefabAlternativo = estadoActual ? bañeraVaciaPrefab : bañeraLlenaPrefab;
+                break;
+            case "Lavamanos":
+                posicionSpawn = spawnLavamanos.position;
+                prefabAlternativo = estadoActual ? lavamanosVacioPrefab : lavamanosLlenoPrefab;
+                break;
         }
 
-        if (prefabAlternativo == null || spawnPoint == null)
+        if (prefabAlternativo == null)
         {
-            Debug.LogError("Prefab o spawn point no asignado!");
+            Debug.LogError($"Prefab no asignado para {tag}");
             return;
         }
 
-        // Guardar propiedades antes de destruir
+        // Guardar rotación y escala
         Quaternion rotacion = objetoActual.transform.rotation;
         Vector3 escala = objetoActual.transform.localScale;
 
         Destroy(objetoActual);
 
         // Instanciar nuevo objeto
-        objetoActual = Instantiate(
-            prefabAlternativo,
-            spawnPoint.position, // Usar posición exacta del spawn point
-            rotacion
-        );
-
-        // Configurar el nuevo objeto
+        objetoActual = Instantiate(prefabAlternativo, posicionSpawn, rotacion);
         objetoActual.transform.localScale = escala;
-        ConfigurarObjetoInteractuable(objetoActual);
-        ActualizarInterfaz();
 
-        Debug.Log($"Instanciado {objetoActual.name} en {spawnPoint.position}");
+        // Configuración automática
+        ConfigurarObjetoInteractuable(objetoActual, tag);
     }
 
-    private void ConfigurarObjetoInteractuable(GameObject obj)
+    private void ConfigurarObjetoInteractuable(GameObject obj, string tag)
     {
-        if (obj == null) return;
+        obj.tag = tag;
 
-        // Configurar tag según el tipo de objeto
-        if (obj.name.Contains("Inodoro")) obj.tag = "Inodoro";
-        else if (obj.name.Contains("Bañera")) obj.tag = "Bañera";
-        else if (obj.name.Contains("Lavamanos")) obj.tag = "Lavamanos";
-
-        // Asegurar componentes físicos
-        Collider2D collider = obj.GetComponent<Collider2D>() ?? obj.AddComponent<BoxCollider2D>();
+        // Asegurar Collider2D
+        Collider2D collider = obj.GetComponent<Collider2D>();
+        if (collider == null) collider = obj.AddComponent<BoxCollider2D>();
         collider.isTrigger = true;
 
-        Rigidbody2D rbObj = obj.GetComponent<Rigidbody2D>() ?? obj.AddComponent<Rigidbody2D>();
+        // Asegurar Rigidbody2D
+        Rigidbody2D rbObj = obj.GetComponent<Rigidbody2D>();
+        if (rbObj == null) rbObj = obj.AddComponent<Rigidbody2D>();
         rbObj.isKinematic = true;
     }
 
-    private void ActualizarInterfaz()
+    private void ActualizarUI()
     {
         if (textoInteraccion == null) return;
 
-        textoInteraccion.text = puedeInteractuar ? $"Presiona {teclaInteraccion} para interactuar" : "";
         textoInteraccion.gameObject.SetActive(puedeInteractuar);
+        if (puedeInteractuar)
+        {
+            textoInteraccion.text = $"Presiona {teclaInteraccion} para interactuar";
+        }
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, rangoDeteccion);
-
-        DibujarSpawnPoint(spawnInodoro, Color.blue);
-        DibujarSpawnPoint(spawnBañera, Color.red);
-        DibujarSpawnPoint(spawnLavamanos, Color.yellow);
-    }
-
-    private void DibujarSpawnPoint(Transform spawn, Color color)
-    {
-        if (spawn != null)
-        {
-            Gizmos.color = color;
-            Gizmos.DrawWireCube(spawn.position, Vector3.one * 0.3f);
-            Gizmos.DrawLine(spawn.position, spawn.position + Vector3.right * 0.5f);
-        }
+        Gizmos.DrawWireSphere(transform.position, rangoInteraccion);
     }
 }

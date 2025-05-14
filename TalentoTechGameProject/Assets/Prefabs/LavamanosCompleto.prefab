@@ -1,0 +1,243 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3992319214610160793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4617173671126062148}
+  - component: {fileID: -3215581233590294246}
+  m_Layer: 3
+  m_Name: LavamanosCompleto
+  m_TagString: Lavamanos
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4617173671126062148
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3992319214610160793}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.563703, y: 2.9798186, z: -0.049126938}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6783769859559003814}
+  - {fileID: 4180689385295883710}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-3215581233590294246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3992319214610160793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebdd51e269661344a99f3b77bb5487ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  estadoVacio: {fileID: 2909777256100277324, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+  estadoLleno: {fileID: 5566316370501743282, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+  nombreMostrado: Lavamanos
+--- !u!1 &4360303337237377532
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4180689385295883710}
+  m_Layer: 3
+  m_Name: Estado_Lleno
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4180689385295883710
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4360303337237377532}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2887885853450141690}
+  m_Father: {fileID: 4617173671126062148}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9054999428656913028
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6783769859559003814}
+  m_Layer: 3
+  m_Name: Estado_Vacio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6783769859559003814
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9054999428656913028}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1850697837845755339}
+  m_Father: {fileID: 4617173671126062148}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2308905158055858753
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6783769859559003814}
+    m_Modifications:
+    - target: {fileID: 2909777256100277324, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+      propertyPath: m_Name
+      value: Lavamanos
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153478716088756106, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153478716088756106, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153478716088756106, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153478716088756106, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9999774
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153478716088756106, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.0067194486
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153478716088756106, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153478716088756106, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153478716088756106, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0.77
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153478716088756106, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153478716088756106, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+--- !u!4 &1850697837845755339 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4153478716088756106, guid: 592f1a64c57f5ed45ab0bad9980fabb4, type: 3}
+  m_PrefabInstance: {fileID: 2308905158055858753}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3324793681957406904
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4180689385295883710}
+    m_Modifications:
+    - target: {fileID: 448071737075939138, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 448071737075939138, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 448071737075939138, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 448071737075939138, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 448071737075939138, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 448071737075939138, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 448071737075939138, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 448071737075939138, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 448071737075939138, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 448071737075939138, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5566316370501743282, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+      propertyPath: m_Name
+      value: LavamanosLleno
+      objectReference: {fileID: 0}
+    - target: {fileID: 5566316370501743282, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+--- !u!4 &2887885853450141690 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 448071737075939138, guid: 920cef268d5df3f43a6ef528163236c8, type: 3}
+  m_PrefabInstance: {fileID: 3324793681957406904}
+  m_PrefabAsset: {fileID: 0}
