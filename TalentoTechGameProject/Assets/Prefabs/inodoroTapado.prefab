@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 6039955418277242474}
   - component: {fileID: 3789218390523495835}
   m_Layer: 0
-  m_Name: inodoroTapado
-  m_TagString: InodoroInteractuable
+  m_Name: InodoroTapado
+  m_TagString: InodoroTapado
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

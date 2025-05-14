@@ -1,38 +1,39 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Animator), typeof(SpriteRenderer))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 public class MovimientoJugadorLibre : MonoBehaviour
 {
-    [SerializeField] private float velocidad = 5f;
-
+    public float velocidadMovimiento = 5f;
     private Rigidbody2D rb;
     private Animator animator;
-    private SpriteRenderer spriteRenderer;
-    private Vector2 movimiento;
 
-    private void Awake()
+    private Vector2 inputMovimiento;
+
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    private void Update()
+    void Update()
     {
-        float movimientoX = Input.GetAxisRaw("Horizontal");
-        float movimientoY = Input.GetAxisRaw("Vertical");
+        inputMovimiento.x = Input.GetAxisRaw("Horizontal");
+        inputMovimiento.y = Input.GetAxisRaw("Vertical");
 
-        movimiento = new Vector2(movimientoX, movimientoY).normalized;
+        animator.SetBool("isWalking", inputMovimiento != Vector2.zero);
 
-        animator.SetBool("isWalking", movimiento.magnitude > 0);
+        if (inputMovimiento.x != 0)
+        {
+            Vector3 escala = transform.localScale;
+            float escalaOriginal = Mathf.Abs(escala.x);
+            escala.x = escalaOriginal * Mathf.Sign(inputMovimiento.x);
+            transform.localScale = escala;
+        }
 
-        // 🔁 Espejar sprite según dirección horizontal
-        if (movimientoX != 0)
-            spriteRenderer.flipX = movimientoX < 0;
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        rb.linearVelocity = movimiento * velocidad;
+        rb.MovePosition(rb.position + inputMovimiento.normalized * velocidadMovimiento * Time.fixedDeltaTime);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 
-public class InteraccionConObjetoAlternable : MonoBehaviour
+public class ZonaInteraccionEstado : MonoBehaviour
 {
     public TextMeshProUGUI mensajeUI;
     public GameObject prefabTapado;
@@ -15,14 +15,8 @@ public class InteraccionConObjetoAlternable : MonoBehaviour
 
     void Start()
     {
-        if (mensajeUI == null)
-        {
-            Debug.LogError("mensajeUI no está asignado.");
-        }
-        else
-        {
+        if (mensajeUI != null)
             mensajeUI.gameObject.SetActive(false);
-        }
 
         if (prefabTapado != null && puntoSpawn != null)
         {
@@ -53,13 +47,14 @@ public class InteraccionConObjetoAlternable : MonoBehaviour
             nuevo.tag = "InodoroInteractuable";
             objetoActivo = nuevo;
 
+            // Solo muestra el texto, no lo cambia
             MostrarMensaje();
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("InodoroInteractuable"))
         {
             enZona = true;
             MostrarMensaje();
@@ -68,9 +63,10 @@ public class InteraccionConObjetoAlternable : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("InodoroInteractuable"))
         {
             enZona = false;
+            objetoActivo = null;
             if (mensajeUI != null)
                 mensajeUI.gameObject.SetActive(false);
         }
@@ -79,9 +75,6 @@ public class InteraccionConObjetoAlternable : MonoBehaviour
     private void MostrarMensaje()
     {
         if (mensajeUI != null)
-        {
-            mensajeUI.text = estadoTapado ? "Presioná E para destapar" : "Presioná E para tapar";
-            mensajeUI.gameObject.SetActive(true);
-        }
+            mensajeUI.gameObject.SetActive(true); // No modifica el texto
     }
 }
