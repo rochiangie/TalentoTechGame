@@ -11,6 +11,7 @@ public class InteraccionConObjetoAlternable : MonoBehaviour
 
     private GameObject objetoActivo;
     private bool estadoTapado = true;
+    private bool puedeInteractuar = false;
 
     void Start()
     {
@@ -27,50 +28,76 @@ public class InteraccionConObjetoAlternable : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    void Update()
     {
-        if (other.CompareTag("Player") && objetoActivo != null)
+        if (puedeInteractuar && objetoActivo != null && Input.GetKeyDown(teclaInteraccion))
         {
-            if (!mensajeUI.gameObject.activeSelf)
-                MostrarMensaje();
+            Quaternion rot = objetoActivo.transform.rotation;
+            Vector3 escala = objetoActivo.transform.localScale;
 
-            if (Input.GetKeyDown(teclaInteraccion))
-            {
-                Quaternion rot = objetoActivo.transform.rotation;
-                Vector3 escala = objetoActivo.transform.localScale;
+            Destroy(objetoActivo);
+            estadoTapado = !estadoTapado;
 
-                Destroy(objetoActivo);
-                estadoTapado = !estadoTapado;
+            GameObject nuevo = Instantiate(
+                estadoTapado ? prefabTapado : prefabLleno,
+                puntoSpawn.position,
+                rot
+            );
+            nuevo.transform.localScale = escala;
+            nuevo.tag = "InodoroInteractuable";
+            objetoActivo = nuevo;
 
-                GameObject nuevo = Instantiate(
-                    estadoTapado ? prefabTapado : prefabLleno,
-                    puntoSpawn.position,
-                    rot
-                );
-                nuevo.transform.localScale = escala;
-                nuevo.tag = "InodoroInteractuable";
-                objetoActivo = nuevo;
-
-                MostrarMensaje();
-            }
+            if (mensajeUI != null)
+                mensajeUI.gameObject.SetActive(true); // Solo activamos el objeto, no cambiamos el texto
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    public void SetObjetoActivo(GameObject nuevo)
     {
-        if (other.CompareTag("Player"))
-        {
-            if (mensajeUI != null)
-                mensajeUI.gameObject.SetActive(false);
-        }
+        if (nuevo == null || objetoActivo == nuevo) return;
+
+        objetoActivo = nuevo;
+        puedeInteractuar = true;
+    }
+
+    public void ClearObjetoActivo()
+    {
+        puedeInteractuar = false;
+        if (mensajeUI != null)
+            mensajeUI.gameObject.SetActive(false);
     }
 
     private void MostrarMensaje()
     {
         if (mensajeUI != null)
         {
-            mensajeUI.text = estadoTapado ? "Presioná E para destapar" : "Presioná E para tapar";
+            //mensajeUI.text = estadoTapado ? "Presioná E para destapar" : "Presioná E para tapar";
             mensajeUI.gameObject.SetActive(true);
         }
     }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("InodoroInteractuable"))
+        {
+            objetoActivo = other.gameObject;
+            puedeInteractuar = true;
+
+            if (mensajeUI != null)
+                mensajeUI.gameObject.SetActive(true);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("InodoroInteractuable"))
+        {
+            objetoActivo = null;
+            puedeInteractuar = false;
+
+            if (mensajeUI != null)
+                mensajeUI.gameObject.SetActive(false);
+        }
+    }
+
+
 }
