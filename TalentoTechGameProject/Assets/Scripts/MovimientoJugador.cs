@@ -22,6 +22,7 @@ public class MovimientoJugador : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     private void Update()
@@ -44,13 +45,14 @@ public class MovimientoJugador : MonoBehaviour
 
         // Movimiento horizontal
         float inputX = Input.GetAxisRaw("Horizontal");
-        bool corriendo = Input.GetKey(KeyCode.R); // correr con R
+        bool corriendo = Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.LeftShift);
         float velocidad = corriendo ? velocidadCarrera : velocidadCaminata;
 
         rb.linearVelocity = new Vector2(inputX * velocidad, rb.linearVelocity.y);
 
-        // Animación de caminata
+        // Animaciones
         animator.SetBool("isWalking", inputX != 0);
+        animator.SetBool("isRunning", corriendo && inputX != 0);
 
         // Voltear sprite
         if (inputX != 0)
@@ -73,7 +75,6 @@ public class MovimientoJugador : MonoBehaviour
 
         if (collision.collider.CompareTag(tagImpulso))
         {
-            // Impulso automático al tocar una plataforma con tag "Jump"
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, fuerzaDobleSalto);
         }
     }

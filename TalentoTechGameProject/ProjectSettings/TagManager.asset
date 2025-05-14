@@ -7,6 +7,12 @@ TagManager:
   - Suelo
   - Muerte
   - Jump
+  - "ba\xF1era"
+  - "ba\xF1eraLlena"
+  - pared
+  - InodoroTapado
+  - InodoroLleno
+  - InodoroInteractuable
   layers:
   - Default
   - TransparentFX
