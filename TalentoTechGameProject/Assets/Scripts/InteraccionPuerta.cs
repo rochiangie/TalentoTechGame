@@ -39,7 +39,7 @@ public class InteraccionPuerta : MonoBehaviour
 
             if (mensajeUI != null)
             {
-                mensajeUI.text = $"Presiona {teclaAbrir} para abrir la puerta";
+                //mensajeUI.text = $"Presiona {teclaAbrir}";
                 mensajeUI.gameObject.SetActive(true);
             }
         }

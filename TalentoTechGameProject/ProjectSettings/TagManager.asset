@@ -17,6 +17,8 @@ TagManager:
   - "Ba\xF1era"
   - Inodoro
   - Puerta
+  - Silla
+  - Mesa
   layers:
   - Default
   - TransparentFX
