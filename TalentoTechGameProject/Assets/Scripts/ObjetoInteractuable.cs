@@ -12,7 +12,7 @@ public class ObjetoInteractuable : MonoBehaviour
             if (animator != null)
             {
                 animator.SetBool("isTouchingObject", true);
-                Debug.Log($"[{gameObject.name}] Jugador tocando objeto. Activado isTouchingObject = true");
+                //Debug.Log($"[{gameObject.name}] Jugador tocando objeto. Activado isTouchingObject = true");
             }
         }
     }
@@ -25,7 +25,7 @@ public class ObjetoInteractuable : MonoBehaviour
             if (animator != null)
             {
                 animator.SetBool("isTouchingObject", false);
-                Debug.Log($"[{gameObject.name}] Jugador dejó de tocar. isTouchingObject = false");
+                //Debug.Log($"[{gameObject.name}] Jugador dejó de tocar. isTouchingObject = false");
             }
         }
     }
