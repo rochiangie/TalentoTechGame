@@ -46,6 +46,7 @@ public class InteraccionJugador : MonoBehaviour
         if (Input.GetKeyDown(teclaInteraccion) && objetoInteractuable != null)
         {
             objetoInteractuable.AlternarEstado();
+            ActualizarUI(); // Refrescar el texto tras el cambio
         }
     }
 
@@ -83,7 +84,7 @@ public class InteraccionJugador : MonoBehaviour
         if (objetoInteractuable != null)
         {
             string nombre = objetoInteractuable.ObtenerNombreEstado();
-            mensajeUI.text = $"Presiona {teclaInteraccion} para usar {nombre}";
+            //mensajeUI.text = $"Presiona {teclaInteraccion} para usar {nombre}";
             mensajeUI.gameObject.SetActive(true);
         }
         else
