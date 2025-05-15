@@ -3,26 +3,28 @@ using UnityEngine;
 public class InteraccionSilla : MonoBehaviour
 {
     public string triggerAnimacionJugador = "isTouchingObject";
-    public float tiempoAntesDeDestruir = 1.5f;
 
-    private bool yaInteractuado = false;
-
-    public void EjecutarAccion(GameObject jugador)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (yaInteractuado) return;
+        if (!collision.CompareTag("Player")) return;
 
-        Animator animJugador = jugador.GetComponent<Animator>();
+        Animator animJugador = collision.GetComponent<Animator>();
         if (animJugador != null)
         {
             animJugador.SetBool(triggerAnimacionJugador, true);
+            Debug.Log("Jugador tocó la silla. Trigger animación activado.");
         }
-
-        yaInteractuado = true;
-        Invoke(nameof(DestruirSilla), tiempoAntesDeDestruir);
     }
 
-    void DestruirSilla()
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        Destroy(gameObject);
+        if (!collision.CompareTag("Player")) return;
+
+        Animator animJugador = collision.GetComponent<Animator>();
+        if (animJugador != null)
+        {
+            animJugador.SetBool(triggerAnimacionJugador, false);
+            Debug.Log("Jugador se alejó de la silla. Trigger desactivado.");
+        }
     }
 }

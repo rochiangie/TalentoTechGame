@@ -20,6 +20,8 @@ public class InteraccionJugador : MonoBehaviour
     private Vector2 input;
     private ControladorEstados objetoInteractuable;
 
+    private InteraccionSilla sillaCercana; // NUEVO
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -43,10 +45,19 @@ public class InteraccionJugador : MonoBehaviour
         DetectarObjetoInteractuable();
 
         // Interactuar
-        if (Input.GetKeyDown(teclaInteraccion) && objetoInteractuable != null)
+        if (Input.GetKeyDown(teclaInteraccion))
         {
-            objetoInteractuable.AlternarEstado();
-            ActualizarUI(); // Refrescar el texto tras el cambio
+            if (objetoInteractuable != null)
+            {
+                objetoInteractuable.AlternarEstado();
+                ActualizarUI(); // Refrescar el texto tras el cambio
+            }
+
+            /*if (sillaCercana != null)
+            {
+                sillaCercana.EjecutarAccion(gameObject);
+                Debug.Log("EjecutarAccion llamado desde el jugador");
+            }*/
         }
     }
 
@@ -59,14 +70,22 @@ public class InteraccionJugador : MonoBehaviour
     {
         Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, rango, capaInteractuable);
         ControladorEstados encontrado = null;
+        sillaCercana = null; // reset
 
         foreach (var col in objetos)
         {
+            // Detectar ControladorEstados (tipo genérico)
             var candidato = col.GetComponentInParent<ControladorEstados>();
-            if (candidato != null)
+            if (candidato != null && encontrado == null)
             {
                 encontrado = candidato;
-                break;
+            }
+
+            // Detectar si también hay una silla cerca
+            var silla = col.GetComponentInParent<InteraccionSilla>();
+            if (silla != null && sillaCercana == null)
+            {
+                sillaCercana = silla;
             }
         }
 
