@@ -25,6 +25,7 @@ TagManager:
   - Sofa
   - Tapete
   - Piso
+  - Cabinete
   layers:
   - Default
   - TransparentFX
