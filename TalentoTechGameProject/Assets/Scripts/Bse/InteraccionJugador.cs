@@ -212,13 +212,7 @@ public class InteraccionJugador : MonoBehaviour
         if (candidato != null)
         {
             objetoInteractuable = candidato;
-            Debug.Log($"🟢 Detectado interactuable: {candidato.gameObject.name}");
         }
-        else
-        {
-            Debug.Log($"⚠️ Sin ControladorEstados en: {other.name}");
-        }
- 
     }
 
     public bool EstaLlevandoObjeto()
