@@ -38,6 +38,8 @@ public class InteraccionJugador : MonoBehaviour
     private bool llevaObjeto = false;
     public GameObject ObjetoTransportado { get { return objetoTransportado; } }
     [SerializeField] private Transform canvasFlotante;
+    private GameObject prefabActualTransportado;
+
 
     void Awake()
     {
@@ -93,12 +95,16 @@ public class InteraccionJugador : MonoBehaviour
             // Interactuar con el gabinete de platos
             if (gabinetePlatosCercano != null)
             {
+                Debug.Log("✔ Intentando guardar platos en gabinete");
+
                 // Intentar guardar platos
-                if (!gabinetePlatosCercano.EstaLleno() && llevaObjeto && objetoTransportado.CompareTag(gabinetePlatosCercano.tagObjetoRequerido))
+                if (!gabinetePlatosCercano.EstaLleno() && llevaObjeto &&
+                     objetoTransportado.CompareTag(gabinetePlatosCercano.TagObjetoRequerido))
                 {
                     gabinetePlatosCercano.IntentarGuardarPlatos(this);
                     return;
                 }
+
                 // Intentar sacar platos
                 else if (gabinetePlatosCercano.EstaLleno() && !llevaObjeto)
                 {
@@ -106,7 +112,7 @@ public class InteraccionJugador : MonoBehaviour
                     return;
                 }
                 // Mostrar mensaje específico si no se cumplen las condiciones (opcional)
-                else if (llevaObjeto && !objetoTransportado.CompareTag(gabinetePlatosCercano.tagObjetoRequerido))
+                else if (llevaObjeto && !objetoTransportado.CompareTag(gabinetePlatosCercano.TagObjetoRequerido))
                 {
                     //ActualizarMensajeUI($"Necesitas {gabinetePlatosCercano.tagObjetoRequerido} para este gabinete.");
                     return;
@@ -199,11 +205,11 @@ public class InteraccionJugador : MonoBehaviour
         {
             if (!gabinetePlatosCercano.EstaLleno())
             {
-                mensajeUI.text = $"Presiona {teclaInteraccion} para guardar {gabinetePlatosCercano.tagObjetoRequerido}";
+                mensajeUI.text = $"Presiona {teclaInteraccion} para guardar {gabinetePlatosCercano.TagObjetoRequerido}";
             }
             else
             {
-                mensajeUI.text = $"Presiona {teclaInteraccion} para sacar {gabinetePlatosCercano.prefabPlatos.name}(s)";
+                mensajeUI.text = $"Presiona {teclaInteraccion} para sacar {gabinetePlatosCercano.PrefabPlatos.name}(s)";
             }
             mensajeUI.gameObject.SetActive(true);
         }
@@ -240,6 +246,14 @@ public class InteraccionJugador : MonoBehaviour
         llevaObjeto = true;
         objetoTransportado = objeto;
 
+        // Detectar qué prefab es
+        if (objeto.CompareTag("Platos"))
+            prefabActualTransportado = Resources.Load<GameObject>("Prefabs/Platos"); // o asignalo de otro modo
+        else if (objeto.CompareTag("RopaSucia"))
+            prefabActualTransportado = Resources.Load<GameObject>("Prefabs/RopaSucia");
+        else if (objeto.CompareTag("Tarea"))
+            prefabActualTransportado = Resources.Load<GameObject>("Prefabs/Tarea");
+
         // Transformación
         objetoTransportado.transform.SetParent(puntoDeCarga);
         objetoTransportado.transform.localPosition = Vector3.zero;
@@ -249,7 +263,6 @@ public class InteraccionJugador : MonoBehaviour
         // Renderizado
         SpriteRenderer srJugador = GetComponent<SpriteRenderer>();
         SpriteRenderer srObjeto = objetoTransportado.GetComponent<SpriteRenderer>();
-
         if (srJugador != null && srObjeto != null)
         {
             srObjeto.sortingLayerName = srJugador.sortingLayerName;
@@ -259,13 +272,13 @@ public class InteraccionJugador : MonoBehaviour
         // Física
         Collider2D col = objetoTransportado.GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
-
         Rigidbody2D rb = objetoTransportado.GetComponent<Rigidbody2D>();
         if (rb != null) rb.simulated = false;
 
         objetoCercanoRecogible = null;
         ActualizarUI();
     }
+
 
     private void SoltarObjeto()
     {
