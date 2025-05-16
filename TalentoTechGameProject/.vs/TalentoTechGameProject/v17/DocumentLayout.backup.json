@@ -7,15 +7,15 @@
       "RelativeMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\bse\\interaccionjugador.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|c:\\users\\rocio\\documents\\projects\\talentotechgame\\talentotechgameproject\\assets\\scripts\\bse\\interaccionsilla.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\assets\\scripts\\bse\\interaccionsilla.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\bse\\interaccionsilla.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|c:\\users\\rocio\\documents\\projects\\talentotechgame\\talentotechgameproject\\assets\\scripts\\bse\\objetointeractuable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\assets\\scripts\\bse\\objetointeractuable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\bse\\objetointeractuable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|c:\\users\\rocio\\documents\\projects\\talentotechgame\\talentotechgameproject\\assets\\scripts\\bse\\interactuables.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\assets\\scripts\\bse\\interactuables.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\bse\\interactuables.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -42,8 +42,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Bse\\InteraccionSilla.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-16T18:00:34.458Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-16T18:00:34.458Z"
             },
             {
               "$type": "Document",
@@ -55,8 +54,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Bse\\Interactuables.cs",
               "ViewState": "AgIAACQAAAAAAAAAAAAowDMAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-16T15:22:17.494Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-16T15:22:17.494Z"
             },
             {
               "$type": "Document",
@@ -68,8 +66,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Bse\\ObjetoInteractuable.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAEIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-16T14:51:06.66Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-16T14:51:06.66Z"
             },
             {
               "$type": "Document",

@@ -17,6 +17,7 @@ public class ControladorEstados : MonoBehaviour
     [SerializeField] private bool estaLleno = false;
     [SerializeField] private bool debugLogs = true;
 
+
     void Start()
     {
         ValidarReferencias();
@@ -54,6 +55,27 @@ public class ControladorEstados : MonoBehaviour
     {
         if (!enabled) return;
 
+        var jugador = FindObjectOfType<InteraccionJugador>();
+
+        if (jugador != null && jugador.EstaLlevandoObjeto())
+        {
+            GameObject objeto = jugador.ObjetoTransportado;
+
+            if (objeto != null && objeto.CompareTag("Platos"))
+            {
+                // Guardar los platos
+                jugador.SoltarYDestruirObjeto();
+                estaLleno = true;
+                ActualizarEstados();
+
+                if (debugLogs)
+                    Debug.Log("Platos guardados en el cabinet");
+
+                return;
+            }
+        }
+
+        // Cambio normal de estado (vacío <-> lleno)
         estaLleno = !estaLleno;
         ActualizarEstados();
 
@@ -62,6 +84,7 @@ public class ControladorEstados : MonoBehaviour
             Debug.Log($"[ControladorEstados] {gameObject.name} alternado a {(estaLleno ? "Lleno" : "Vacío")}", gameObject);
         }
     }
+
 
     private void ActualizarEstados()
     {
@@ -74,7 +97,6 @@ public class ControladorEstados : MonoBehaviour
         return $"{nombreMostrado} ({(estaLleno ? "Lleno" : "Vacío")})";
     }
 
-    // Método para forzar un estado específico (opcional)
     public void SetEstado(bool lleno)
     {
         estaLleno = lleno;

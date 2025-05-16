@@ -91,12 +91,24 @@ public class InteraccionJugador : MonoBehaviour
                 ActualizarUI(); // Refrescar el texto tras el cambio
             }
 
+            // Interacción con silla
             if (sillaCercana != null)
             {
                 sillaCercana.EjecutarAccion(gameObject);
             }
+
+            // Interacción con cama
+            if (objetoCercano != null && objetoCercano.CompareTag("Cama"))
+            {
+                InteractuableCama cama = objetoCercano.GetComponent<InteractuableCama>();
+                if (cama != null)
+                {
+                    cama.Interactuar();
+                }
+            }
         }
     }
+
 
     void FixedUpdate()
     {
