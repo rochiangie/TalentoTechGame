@@ -329,5 +329,9 @@ public class InteraccionJugador : MonoBehaviour
         }
     }
 
+    public bool EstaLlevandoObjeto()
+    {
+        return llevaObjeto;
+    }
 
 }
