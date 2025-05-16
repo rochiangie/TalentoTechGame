@@ -2318,8 +2318,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea91f6dd23a1f1047879545aad17c05f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  estadoVacio: {fileID: 18496049}
-  estadoLleno: {fileID: 2047719114}
+  estadoVacio: {fileID: 2047719114}
+  estadoLleno: {fileID: 18496049}
   teclaInteraccion: 101
   tagObjetoRequerido: Platos
   sonidoGuardar: {fileID: 0}
@@ -5640,9 +5640,9 @@ GameObject:
   - component: {fileID: 1895000334}
   - component: {fileID: 1895000333}
   - component: {fileID: 1895000332}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Platos
-  m_TagString: Untagged
+  m_TagString: Platos
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
