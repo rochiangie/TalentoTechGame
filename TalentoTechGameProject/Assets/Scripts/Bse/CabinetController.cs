@@ -8,6 +8,7 @@ public class CabinetController : MonoBehaviour
 
     [Header("Prefab y Configuración")]
     [SerializeField] private GameObject prefabPlatos;
+    [SerializeField] private GameObject prefabPlatoRetirable;
     [SerializeField] private Transform puntoSpawn;
     [SerializeField] private string tagObjetoRequerido = "Platos";
     [SerializeField] private AudioClip sonidoGuardar;
@@ -26,10 +27,14 @@ public class CabinetController : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log("CabinetController: Update activo");
+
         if (jugadorCerca && Input.GetKeyDown(KeyCode.E))
         {
             InteraccionJugador jugador = FindObjectOfType<InteraccionJugador>();
             if (jugador == null) return;
+
+            Debug.Log($"🧠 QUIERE GUARDAR. Lleva objeto: {jugador.EstaLlevandoObjeto()}, Objeto: {jugador.ObjetoTransportado?.name}, Tag: {jugador.ObjetoTransportado?.tag}");
 
             if (!yaLleno && jugador.EstaLlevandoObjeto() && jugador.ObjetoTransportado.CompareTag(tagObjetoRequerido))
             {
@@ -60,31 +65,28 @@ public class CabinetController : MonoBehaviour
 
         if (!objeto.CompareTag(tagObjetoRequerido))
         {
-            Debug.LogWarning($"❌ El objeto no tiene el tag requerido: {tagObjetoRequerido}");
+            Debug.LogWarning($"❌ El objeto no tiene el tag requerido: {tagObjetoRequerido}. Tiene: {objeto.tag}");
             return;
         }
 
-        Debug.Log("✔ Intentando guardar platos en gabinete");
+        Debug.Log("✅ Guardando correctamente el objeto");
 
-        // CAMBIO DE ESTADO
         estadoVacio.SetActive(false);
         estadoLleno.SetActive(true);
         yaLleno = true;
 
-        // SONIDO
+        jugador.SoltarYDestruirObjeto();
+        Debug.Log("🗑 Objeto destruido correctamente");
+
         if (sonidoGuardar != null)
             AudioSource.PlayClipAtPoint(sonidoGuardar, transform.position);
-
-        // DESTRUIR OBJETO
-        jugador.SoltarYDestruirObjeto();
     }
-
 
     public void SacarPlatosDelGabinete(InteraccionJugador jugador)
     {
         if (yaLleno && !jugador.EstaLlevandoObjeto())
         {
-            GameObject nuevoObjeto = Instantiate(prefabPlatos, puntoSpawn.position, Quaternion.identity);
+            GameObject nuevoObjeto = Instantiate(prefabPlatoRetirable != null ? prefabPlatoRetirable : prefabPlatos, puntoSpawn.position, Quaternion.identity);
             jugador.RecogerObjeto(nuevoObjeto);
 
             if (estadoVacio != null) estadoVacio.SetActive(true);
