@@ -3504,7 +3504,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1404566374}
   m_Layer: 0
-  m_Name: PuntoSpawnPlatos
+  m_Name: PuntoCarga
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5965,6 +5965,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4257972300080863084, guid: 398f2a23126d426408580b92a0747f8b, type: 3}
+      propertyPath: prefabPlatos
+      value: 
+      objectReference: {fileID: 3690192204078236786, guid: 1e037dd0125efcf40818d78d5bad7c79, type: 3}
     - target: {fileID: 7422122834583775724, guid: 398f2a23126d426408580b92a0747f8b, type: 3}
       propertyPath: m_Name
       value: Cabinete2

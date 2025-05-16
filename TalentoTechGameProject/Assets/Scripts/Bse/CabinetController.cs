@@ -5,85 +5,85 @@ public class CabinetController : MonoBehaviour
     [Header("Estados del Cabinet")]
     public GameObject estadoVacio;
     public GameObject estadoLleno;
-    [SerializeField] private KeyCode teclaInteraccion = KeyCode.E;
+
+    [Header("Platos")]
+    public GameObject prefabPlatos;
 
     [Header("Configuración")]
-    [SerializeField] private string tagObjetoRequerido = "Platos";
+    [SerializeField] private KeyCode teclaInteraccion = KeyCode.E;
+    [SerializeField] public string tagObjetoRequerido = "Platos"; // ¡Ahora es public!
     [SerializeField] private AudioClip sonidoGuardar;
 
-    private bool yaLleno = false;
-    private InteraccionJugador jugador;
+    private bool estaLleno = false;
     private bool jugadorCerca = false;
+
+    public bool EstaLleno() { return estaLleno; }
 
     private void Awake()
     {
-        // Inicializar estados visuales
         if (estadoVacio != null) estadoVacio.SetActive(true);
         if (estadoLleno != null) estadoLleno.SetActive(false);
-
-        jugador = FindObjectOfType<InteraccionJugador>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(teclaInteraccion) && jugadorCerca && !yaLleno)
-        {
-            ProcesarInteraccion();
-        }
+        // La lógica de Input se movió a InteraccionJugador
     }
 
-    private void ProcesarInteraccion()
+    public void IntentarGuardarPlatos(InteraccionJugador jugador)
     {
-        if (jugador != null && jugador.EstaLlevandoObjeto() &&
-            jugador.ObjetoTransportado != null &&
-            jugador.ObjetoTransportado.CompareTag(tagObjetoRequerido))
+        if (!estaLleno && jugador != null && jugador.EstaLlevandoObjeto())
         {
-            LlenarGabinete(jugador.ObjetoTransportado);
-            jugador.SoltarYDestruirObjeto();
+            GameObject obj = jugador.ObjetoTransportado;
 
-            if (sonidoGuardar != null)
+            if (obj != null && obj.CompareTag(tagObjetoRequerido))
             {
-                AudioSource.PlayClipAtPoint(sonidoGuardar, transform.position);
+                jugador.SoltarYDestruirObjeto();
+
+                estaLleno = true;
+                estadoVacio.SetActive(false);
+                estadoLleno.SetActive(true);
+
+                if (sonidoGuardar != null)
+                    AudioSource.PlayClipAtPoint(sonidoGuardar, transform.position);
+
+                Debug.Log("Platos guardados en el cabinet.");
             }
         }
     }
 
-    private void LlenarGabinete(GameObject objeto)
+    public void SacarPlatosDelGabinete(InteraccionJugador jugador)
     {
-        yaLleno = true;
+        if (estaLleno && jugador != null && !jugador.EstaLlevandoObjeto())
+        {
+            if (prefabPlatos == null) return;
 
-        if (estadoVacio != null) estadoVacio.SetActive(false);
-        if (estadoLleno != null) estadoLleno.SetActive(true);
+            // Crear instancia de platos en el punto de carga del jugador
+            Transform puntoCarga = jugador.transform.Find("PuntoCarga"); // Asegúrate que se llame así
+            if (puntoCarga == null)
+            {
+                Debug.LogWarning("No se encontró el punto de carga en el jugador.");
+                return;
+            }
 
-        Destroy(objeto);
-        Debug.Log($"{tagObjetoRequerido} guardados en el cabinet");
+            GameObject nuevosPlatos = Instantiate(prefabPlatos, puntoCarga.position, Quaternion.identity);
+            jugador.RecogerObjeto(nuevosPlatos);
+
+            estaLleno = false;
+            estadoVacio.SetActive(true);
+            estadoLleno.SetActive(false);
+
+            Debug.Log("Platos recuperados del gabinete.");
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            jugadorCerca = true;
-        }
-        else if (!yaLleno && other.CompareTag(tagObjetoRequerido) && other.transform.parent == null)
-        {
-            LlenarGabinete(other.gameObject);
-        }
+        // No necesitamos detectar al jugador aquí, la detección se hace en InteraccionJugador
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            jugadorCerca = false;
-        }
-    }
-
-    // Método para reiniciar el cabinet (opcional)
-    public void ReiniciarCabinet()
-    {
-        yaLleno = false;
-        if (estadoVacio != null) estadoVacio.SetActive(true);
-        if (estadoLleno != null) estadoLleno.SetActive(false);
+        // No necesitamos detectar al jugador aquí
     }
 }
