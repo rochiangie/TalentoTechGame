@@ -15,7 +15,18 @@ public class InteraccionSilla : MonoBehaviour
             Debug.Log("Jugador tocó la silla. Trigger animación activado.");
         }
     }
+    public void EjecutarAccion(GameObject jugador)
+    {
+        // Lógica para sentarse/levantarse
+        var jugadorInteract = jugador.GetComponent<InteraccionJugador>();
+        if (jugadorInteract != null && jugadorInteract.EstaLlevandoObjeto())
+        {
+            Debug.Log("No puedes sentarte mientras llevas un objeto");
+            return;
+        }
 
+        // Resto de la lógica de la silla...
+    }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (!collision.CompareTag("Player")) return;
