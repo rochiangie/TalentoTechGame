@@ -1,119 +1,209 @@
 ﻿using UnityEngine;
+using TMPro;
 
-public class CabinetController : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
+public class InteraccionJugador : MonoBehaviour
 {
-    [Header("Estados del Cabinet")]
-    [SerializeField] private GameObject estadoVacio;
-    [SerializeField] private GameObject estadoLleno;
+    [Header("Movimiento")]
+    public float velocidadMovimiento = 5f;
+    public float velocidadCorrer = 8f;
+    public KeyCode teclaCorrer = KeyCode.LeftShift;
 
-    [Header("Prefab y Configuración")]
-    [SerializeField] private GameObject prefabPlatos;
-    [SerializeField] private GameObject prefabPlatoRetirable;
-    [SerializeField] private Transform puntoSpawn;
-    [SerializeField] private string tagObjetoRequerido = "Platos";
-    [SerializeField] private AudioClip sonidoGuardar;
+    [Header("Interacción")]
+    public float rango = 1.5f;
+    public LayerMask capaInteractuable;
+    public KeyCode teclaInteraccion = KeyCode.E;
 
-    public string TagObjetoRequerido => tagObjetoRequerido;
-    public GameObject PrefabPlatos => prefabPlatos;
+    [Header("UI")]
+    public TextMeshProUGUI mensajeUI;
 
-    private bool yaLleno = false;
-    private bool jugadorCerca = false;
+    [Header("Transporte Objetos")]
+    public Transform puntoDeCarga;
+    [SerializeField] private string[] tagsRecogibles = { "Platos", "RopaSucia", "Tarea" };
 
-    private void Awake()
+    private Rigidbody2D rb;
+    private Animator animator;
+    private Vector2 input;
+    private ControladorEstados objetoInteractuableCercano;
+    private CabinetController gabinetePlatosCercano;
+    private InteraccionSilla sillaCercana;
+
+    private GameObject objetoCercanoRecogible;
+    private GameObject objetoTransportado;
+    private bool llevaObjeto = false;
+    public GameObject ObjetoTransportado => objetoTransportado;
+
+    void Awake()
     {
-        if (estadoVacio != null) estadoVacio.SetActive(true);
-        if (estadoLleno != null) estadoLleno.SetActive(false);
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
-    private void Update()
+    void Update()
     {
-        Debug.Log("CabinetController: Update activo");
+        input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        if (jugadorCerca && Input.GetKeyDown(KeyCode.E))
+        if (input.x != 0)
         {
-            InteraccionJugador jugador = FindObjectOfType<InteraccionJugador>();
-            if (jugador == null) return;
+            Vector3 escala = transform.localScale;
+            escala.x = Mathf.Sign(input.x) * Mathf.Abs(escala.x);
+            transform.localScale = escala;
+        }
 
-            Debug.Log($"🧠 QUIERE GUARDAR. Lleva objeto: {jugador.EstaLlevandoObjeto()}, Objeto: {jugador.ObjetoTransportado?.name}, Tag: {jugador.ObjetoTransportado?.tag}");
+        bool corriendo = Input.GetKey(teclaCorrer);
+        animator.SetBool("isRunning", corriendo && input != Vector2.zero);
+        animator.SetBool("isWalking", !corriendo && input != Vector2.zero);
 
-            if (!yaLleno && jugador.EstaLlevandoObjeto() && jugador.ObjetoTransportado.CompareTag(tagObjetoRequerido))
+        DetectarObjetosCercanos();
+
+        if (Input.GetKeyDown(teclaInteraccion))
+        {
+            if (gabinetePlatosCercano != null)
             {
-                IntentarGuardarPlatos(jugador);
+                Debug.Log("\u2714 Intentando guardar platos en gabinete");
+                if (!gabinetePlatosCercano.EstaLleno() && llevaObjeto && objetoTransportado.CompareTag(gabinetePlatosCercano.TagObjetoRequerido))
+                {
+                    gabinetePlatosCercano.IntentarGuardarPlatos(this);
+                    return;
+                }
+                else if (gabinetePlatosCercano.EstaLleno() && !llevaObjeto)
+                {
+                    gabinetePlatosCercano.SacarPlatosDelGabinete(this);
+                    return;
+                }
+                return;
             }
-            else if (yaLleno && !jugador.EstaLlevandoObjeto())
+
+            if (objetoInteractuableCercano != null)
             {
-                SacarPlatosDelGabinete(jugador);
+                objetoInteractuableCercano.AlternarEstado();
+                ActualizarUI();
+                return;
+            }
+
+            if (!llevaObjeto && objetoCercanoRecogible != null && EsRecogible(objetoCercanoRecogible.tag))
+            {
+                RecogerObjeto(objetoCercanoRecogible);
+                return;
+            }
+
+            if (!llevaObjeto && sillaCercana != null)
+            {
+                sillaCercana.EjecutarAccion(gameObject);
             }
         }
+
+        ActualizarUI();
     }
 
-    public void IntentarGuardarPlatos(InteraccionJugador jugador)
+    void FixedUpdate()
     {
-        GameObject objeto = jugador.ObjetoTransportado;
-
-        if (yaLleno)
-        {
-            Debug.Log("🧺 El gabinete ya está lleno.");
-            return;
-        }
-
-        if (objeto == null)
-        {
-            Debug.LogWarning("❌ No se está llevando ningún objeto.");
-            return;
-        }
-
-        if (!objeto.CompareTag(tagObjetoRequerido))
-        {
-            Debug.LogWarning($"❌ El objeto no tiene el tag requerido: {tagObjetoRequerido}. Tiene: {objeto.tag}");
-            return;
-        }
-
-        Debug.Log("✅ Guardando correctamente el objeto");
-
-        estadoVacio.SetActive(false);
-        estadoLleno.SetActive(true);
-        yaLleno = true;
-
-        jugador.SoltarYDestruirObjeto();
-        Debug.Log("🗑 Objeto destruido correctamente");
-
-        if (sonidoGuardar != null)
-            AudioSource.PlayClipAtPoint(sonidoGuardar, transform.position);
+        float velocidadFinal = Input.GetKey(teclaCorrer) ? velocidadCorrer : velocidadMovimiento;
+        rb.velocity = input.normalized * velocidadFinal;
     }
 
-    public void SacarPlatosDelGabinete(InteraccionJugador jugador)
+    void DetectarObjetosCercanos()
     {
-        if (yaLleno && !jugador.EstaLlevandoObjeto())
+        objetoInteractuableCercano = null;
+        gabinetePlatosCercano = null;
+        objetoCercanoRecogible = null;
+        sillaCercana = null;
+
+        Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, rango, capaInteractuable);
+
+        foreach (var col in objetos)
         {
-            GameObject nuevoObjeto = Instantiate(prefabPlatoRetirable != null ? prefabPlatoRetirable : prefabPlatos, puntoSpawn.position, Quaternion.identity);
-            jugador.RecogerObjeto(nuevoObjeto);
+            var interactuable = col.GetComponentInParent<ControladorEstados>();
+            if (interactuable != null) objetoInteractuableCercano = interactuable;
 
-            if (estadoVacio != null) estadoVacio.SetActive(true);
-            if (estadoLleno != null) estadoLleno.SetActive(false);
+            var gabinete = col.GetComponent<CabinetController>();
+            if (gabinete != null) gabinetePlatosCercano = gabinete;
 
-            yaLleno = false;
+            if (!llevaObjeto && EsRecogible(col.tag)) objetoCercanoRecogible = col.gameObject;
+
+            var silla = col.GetComponent<InteraccionSilla>();
+            if (silla != null) sillaCercana = silla;
         }
     }
 
-    public bool EstaLleno()
+    void ActualizarUI(string mensaje = "")
     {
-        return yaLleno;
+        if (mensajeUI == null) return;
+
+        if (!string.IsNullOrEmpty(mensaje))
+        {
+            mensajeUI.text = mensaje;
+        }
+        else if (gabinetePlatosCercano != null)
+        {
+            mensajeUI.text = llevaObjeto && !gabinetePlatosCercano.EstaLleno()
+                ? $"Presiona {teclaInteraccion} para guardar {gabinetePlatosCercano.TagObjetoRequerido}"
+                : $"Presiona {teclaInteraccion} para sacar {gabinetePlatosCercano.PrefabPlatos.name}";
+        }
+        else if (objetoInteractuableCercano != null)
+        {
+            mensajeUI.text = $"Presiona {teclaInteraccion} para usar {objetoInteractuableCercano.ObtenerNombreEstado()}";
+        }
+        else if (objetoCercanoRecogible != null && !llevaObjeto)
+        {
+            mensajeUI.text = $"Presiona {teclaInteraccion} para recoger {objetoCercanoRecogible.tag}";
+        }
+        else
+        {
+            mensajeUI.text = "";
+        }
+
+        mensajeUI.gameObject.SetActive(!string.IsNullOrEmpty(mensajeUI.text));
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public void RecogerObjeto(GameObject objeto)
     {
-        if (other.CompareTag("Player"))
+        if (llevaObjeto || objeto == null) return;
+
+        llevaObjeto = true;
+        objetoTransportado = objeto;
+
+        objeto.transform.SetParent(puntoDeCarga);
+        objeto.transform.localPosition = Vector3.zero;
+        objeto.transform.localRotation = Quaternion.identity;
+        objeto.transform.localScale = Vector3.one;
+
+        SpriteRenderer srJugador = GetComponent<SpriteRenderer>();
+        SpriteRenderer srObjeto = objeto.GetComponent<SpriteRenderer>();
+        if (srJugador != null && srObjeto != null)
         {
-            jugadorCerca = true;
+            srObjeto.sortingLayerName = srJugador.sortingLayerName;
+            srObjeto.sortingOrder = srJugador.sortingOrder + 1;
         }
+
+        Collider2D col = objeto.GetComponent<Collider2D>();
+        if (col != null) col.enabled = false;
+
+        Rigidbody2D rb = objeto.GetComponent<Rigidbody2D>();
+        if (rb != null) rb.simulated = false;
+
+        objetoCercanoRecogible = null;
+        ActualizarUI();
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    public void SoltarYDestruirObjeto()
     {
-        if (other.CompareTag("Player"))
-        {
-            jugadorCerca = false;
-        }
+        if (!llevaObjeto || objetoTransportado == null) return;
+
+        Destroy(objetoTransportado);
+        objetoTransportado = null;
+        llevaObjeto = false;
+        ActualizarUI();
     }
+
+    private bool EsRecogible(string tag)
+    {
+        foreach (string recogible in tagsRecogibles)
+        {
+            if (tag == recogible) return true;
+        }
+        return false;
+    }
+
+    public bool EstaLlevandoObjeto() => llevaObjeto;
 }

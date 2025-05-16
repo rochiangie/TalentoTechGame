@@ -3,11 +3,11 @@
   "WorkspaceRootPath": "C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|c:\\users\\rocio\\documents\\projects\\talentotechgame\\talentotechgameproject\\assets\\scripts\\mirarcamara.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\mirarcamara.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|c:\\users\\rocio\\documents\\projects\\talentotechgame\\talentotechgameproject\\assets\\scripts\\mirarcamara.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\scripts\\mirarcamara.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|c:\\users\\rocio\\documents\\projects\\talentotechgame\\talentotechgameproject\\assets\\scripts\\bse\\interaccionsilla.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\assets\\scripts\\bse\\interaccionsilla.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\bse\\interaccionsilla.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -19,8 +19,8 @@
       "RelativeMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\bse\\cabinetcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|c:\\users\\rocio\\documents\\projects\\talentotechgame\\talentotechgameproject\\assets\\scripts\\bse\\interactuablecama.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\scripts\\bse\\interactuablecama.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\Assets\\Scripts\\Bse\\InteractuableCama.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Bse\\InteractuableCama.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\assets\\scripts\\bse\\controladorestados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,8 +42,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "InteractuableCama.cs",
+              "DocumentMoniker": "C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\Assets\\Scripts\\Bse\\InteractuableCama.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Bse\\InteractuableCama.cs",
+              "ToolTip": "C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\Assets\\Scripts\\Bse\\InteractuableCama.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Bse\\InteractuableCama.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-16T18:25:26.137Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -56,18 +69,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-16T20:37:32.454Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "InteractuableCama.cs",
-              "DocumentMoniker": "C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\Assets\\Scripts\\Bse\\InteractuableCama.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Bse\\InteractuableCama.cs",
-              "ToolTip": "C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\Assets\\Scripts\\Bse\\InteractuableCama.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Bse\\InteractuableCama.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-16T18:25:26.137Z"
             },
             {
               "$type": "Document",
@@ -91,8 +92,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Bse\\InteraccionSilla.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-16T18:00:34.458Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-16T18:00:34.458Z"
             },
             {
               "$type": "Document",
