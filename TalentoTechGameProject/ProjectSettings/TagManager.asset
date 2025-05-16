@@ -19,6 +19,12 @@ TagManager:
   - Puerta
   - Silla
   - Mesa
+  - Cama
+  - Escalon
+  - Reloj
+  - Sofa
+  - Tapete
+  - Piso
   layers:
   - Default
   - TransparentFX
