@@ -57,6 +57,12 @@ public class InteraccionJugador : MonoBehaviour
             return;
         }
 
+        if (Input.GetKeyDown(KeyCode.E) && llevaObjeto)
+        {
+            SoltarObjeto();
+            return;
+        }
+
         // Flip de sprite
         if (input.x != 0)
         {
@@ -266,17 +272,28 @@ public class InteraccionJugador : MonoBehaviour
         if (objetoTransportado == null) return;
 
         objetoTransportado.transform.SetParent(null);
-        objetoTransportado.transform.position = transform.position + Vector3.right;
 
+        // Lo soltamos justo al lado del jugador
+        Vector3 posicionSoltar = transform.position + new Vector3(1f * Mathf.Sign(transform.localScale.x), 0, 0);
+        objetoTransportado.transform.position = posicionSoltar;
+
+        // Restaurar físicas
         Collider2D col = objetoTransportado.GetComponent<Collider2D>();
         if (col != null) col.enabled = true;
 
         Rigidbody2D rbItem = objetoTransportado.GetComponent<Rigidbody2D>();
-        if (rbItem != null) rbItem.simulated = true;
+        if (rbItem != null)
+        {
+            rbItem.simulated = true;
+            rbItem.linearVelocity = Vector2.zero;
+            rbItem.isKinematic = false;
+        }
 
         llevaObjeto = false;
         objetoTransportado = null;
+        ActualizarUI();
     }
+
 
     public void SoltarYDestruirObjeto()
     {
