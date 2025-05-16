@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 5561683383917302026}
   - component: {fileID: 6998970232352919842}
   - component: {fileID: 5180312710337156315}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Platos
-  m_TagString: Muerte
+  m_TagString: Platos
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

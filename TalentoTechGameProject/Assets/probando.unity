@@ -5692,7 +5692,6 @@ MonoBehaviour:
   - Tarea
   velocidadEscalon: 2
   direccionEscalon: {x: 0.70710677, y: 0.70710677}
-  canvasFlotante: {fileID: 0}
 --- !u!114 &1887423976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6204,7 +6203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4075686767094524247, guid: 7ed57aaba6fa6524b971671e5039efd6, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4486842342868380905, guid: 7ed57aaba6fa6524b971671e5039efd6, type: 3}
       propertyPath: m_LocalPosition.x

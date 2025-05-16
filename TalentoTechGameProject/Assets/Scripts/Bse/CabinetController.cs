@@ -26,29 +26,49 @@ public class CabinetController : MonoBehaviour
 
     public void IntentarGuardarPlatos(InteraccionJugador jugador)
     {
-        if (!estaLleno && jugador != null && jugador.EstaLlevandoObjeto())
+        Debug.Log("🔍 Intentando guardar en gabinete...");
+
+        if (estaLleno)
         {
-            GameObject obj = jugador.ObjetoTransportado;
-
-            if (obj != null && obj.CompareTag(tagObjetoRequerido))
-            {
-                jugador.SoltarYDestruirObjeto();
-
-                estaLleno = true;
-                if (estadoVacio != null) estadoVacio.SetActive(false);
-                if (estadoLleno != null) estadoLleno.SetActive(true);
-
-                if (sonidoGuardar != null)
-                    AudioSource.PlayClipAtPoint(sonidoGuardar, transform.position);
-
-                Debug.Log("✔ Platos guardados en el gabinete.");
-            }
-            else
-            {
-                Debug.LogWarning("❌ El objeto no tiene el tag requerido.");
-            }
+            Debug.Log("⚠ Ya está lleno.");
+            return;
         }
+
+        if (jugador == null)
+        {
+            Debug.LogWarning("❌ Jugador es null.");
+            return;
+        }
+
+        GameObject obj = jugador.ObjetoTransportado;
+
+        if (obj == null)
+        {
+            Debug.LogWarning("❌ No se está llevando ningún objeto.");
+            return;
+        }
+
+        Debug.Log($"🎯 Objeto tiene tag: {obj.tag}, requerido: {tagObjetoRequerido}");
+
+        if (!obj.CompareTag(tagObjetoRequerido))
+        {
+            Debug.LogWarning("❌ Tag del objeto no coincide.");
+            return;
+        }
+
+        jugador.SoltarYDestruirObjeto();
+
+        estaLleno = true;
+
+        if (estadoVacio != null) estadoVacio.SetActive(false);
+        if (estadoLleno != null) estadoLleno.SetActive(true);
+
+        if (sonidoGuardar != null)
+            AudioSource.PlayClipAtPoint(sonidoGuardar, transform.position);
+
+        Debug.Log("✅ Objeto guardado, estado actualizado.");
     }
+
 
     public void SacarPlatosDelGabinete(InteraccionJugador jugador)
     {
