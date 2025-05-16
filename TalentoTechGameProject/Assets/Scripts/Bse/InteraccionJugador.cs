@@ -31,7 +31,6 @@ public class InteraccionJugador : MonoBehaviour
     private GameObject objetoCercanoRecogible;
     private GameObject objetoTransportado;
     private bool llevaObjeto = false;
-
     public GameObject ObjetoTransportado => objetoTransportado;
 
     void Awake()
@@ -42,8 +41,25 @@ public class InteraccionJugador : MonoBehaviour
 
     void Update()
     {
-        input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
+        // Movimiento y animación
+        bool corriendo = Input.GetKey(teclaCorrer);
+        animator.SetBool("isRunning", corriendo && input != Vector2.zero);
+        animator.SetBool("isWalking", !corriendo && input != Vector2.zero);
+
+        // Flip de sprite
+        if (input.x != 0)
+        {
+            Vector3 escala = transform.localScale;
+            escala.x = Mathf.Sign(input.x) * Mathf.Abs(escala.x);
+            transform.localScale = escala;
+        }
+
+        // Detectar objetos
+        DetectarObjetosCercanos();
+
+        // Interacciones
         if (Input.GetKeyDown(teclaInteraccion))
         {
             if (gabinetePlatosCercano != null)
@@ -58,6 +74,7 @@ public class InteraccionJugador : MonoBehaviour
                     gabinetePlatosCercano.SacarPlatosDelGabinete(this);
                     return;
                 }
+                return;
             }
             else if (objetoInteractuableCercano != null)
             {
@@ -75,26 +92,19 @@ public class InteraccionJugador : MonoBehaviour
             }
         }
 
-        // Animaciones
-        bool corriendo = Input.GetKey(teclaCorrer);
-        animator.SetBool("isRunning", corriendo && input != Vector2.zero);
-        animator.SetBool("isWalking", !corriendo && input != Vector2.zero);
-
-        // Voltear sprite
-        if (input.x != 0)
+        // Soltar objeto (si lleva algo y presiona E)
+        if (Input.GetKeyDown(KeyCode.E) && llevaObjeto)
         {
-            Vector3 escala = transform.localScale;
-            escala.x = Mathf.Sign(input.x) * Mathf.Abs(escala.x);
-            transform.localScale = escala;
+            SoltarObjeto();
         }
 
-        DetectarObjetosCercanos();
+        ActualizarUI();
     }
 
     void FixedUpdate()
     {
         float velocidad = Input.GetKey(teclaCorrer) ? velocidadCorrer : velocidadMovimiento;
-        rb.linearVelocity = input * velocidad;
+        rb.linearVelocity = input.normalized * velocidad;
     }
 
     void DetectarObjetosCercanos()
@@ -105,15 +115,21 @@ public class InteraccionJugador : MonoBehaviour
         sillaCercana = null;
 
         Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, rango, capaInteractuable);
+
         foreach (var col in objetos)
         {
-            if (col.TryGetComponent(out ControladorEstados est)) objetoInteractuableCercano = est;
-            if (col.TryGetComponent(out CabinetController cab)) gabinetePlatosCercano = cab;
-            if (!llevaObjeto && EsRecogible(col.tag)) objetoCercanoRecogible = col.gameObject;
-            if (col.TryGetComponent(out InteraccionSilla silla)) sillaCercana = silla;
-        }
+            if (col.TryGetComponent(out ControladorEstados interactuable))
+                objetoInteractuableCercano = interactuable;
 
-        ActualizarUI();
+            if (col.TryGetComponent(out CabinetController gabinete))
+                gabinetePlatosCercano = gabinete;
+
+            if (!llevaObjeto && EsRecogible(col.tag))
+                objetoCercanoRecogible = col.gameObject;
+
+            if (col.TryGetComponent(out InteraccionSilla silla))
+                sillaCercana = silla;
+        }
     }
 
     void ActualizarUI()
@@ -125,21 +141,31 @@ public class InteraccionJugador : MonoBehaviour
             mensajeUI.text = gabinetePlatosCercano.EstaLleno()
                 ? $"Presiona {teclaInteraccion} para sacar {gabinetePlatosCercano.PrefabPlatos.name}"
                 : $"Presiona {teclaInteraccion} para guardar {gabinetePlatosCercano.TagObjetoRequerido}";
+            mensajeUI.gameObject.SetActive(true);
         }
         else if (objetoInteractuableCercano != null)
         {
             mensajeUI.text = $"Presiona {teclaInteraccion} para usar {objetoInteractuableCercano.ObtenerNombreEstado()}";
+            mensajeUI.gameObject.SetActive(true);
         }
         else if (objetoCercanoRecogible != null && !llevaObjeto)
         {
             mensajeUI.text = $"Presiona {teclaInteraccion} para recoger {objetoCercanoRecogible.tag}";
+            mensajeUI.gameObject.SetActive(true);
         }
         else
         {
-            mensajeUI.text = "";
+            mensajeUI.gameObject.SetActive(false);
         }
+    }
 
-        mensajeUI.gameObject.SetActive(!string.IsNullOrEmpty(mensajeUI.text));
+    bool EsRecogible(string tag)
+    {
+        foreach (string recogible in tagsRecogibles)
+        {
+            if (tag == recogible) return true;
+        }
+        return false;
     }
 
     public void RecogerObjeto(GameObject objeto)
@@ -149,32 +175,104 @@ public class InteraccionJugador : MonoBehaviour
         llevaObjeto = true;
         objetoTransportado = objeto;
 
-        objeto.transform.SetParent(puntoDeCarga);
-        objeto.transform.localPosition = Vector3.zero;
-        objeto.transform.localRotation = Quaternion.identity;
-        objeto.transform.localScale = Vector3.one;
+        objetoTransportado.transform.SetParent(puntoDeCarga);
+        objetoTransportado.transform.localPosition = Vector3.zero;
+        objetoTransportado.transform.localRotation = Quaternion.identity;
+        objetoTransportado.transform.localScale = new Vector3(1f / transform.localScale.x, 1f / transform.localScale.y, 1f);
 
-        if (objeto.TryGetComponent(out Collider2D col)) col.enabled = false;
-        if (objeto.TryGetComponent(out Rigidbody2D body)) body.simulated = false;
+        SpriteRenderer srJugador = GetComponent<SpriteRenderer>();
+        SpriteRenderer srObjeto = objetoTransportado.GetComponent<SpriteRenderer>();
+
+        if (srJugador != null && srObjeto != null)
+        {
+            srObjeto.sortingLayerName = srJugador.sortingLayerName; // misma capa
+            srObjeto.sortingOrder = srJugador.sortingOrder + 1;     // encima del jugador
+        }
+
+
+        Collider2D col = objetoTransportado.GetComponent<Collider2D>();
+        if (col != null) col.enabled = false;
+
+        Rigidbody2D rb = objetoTransportado.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.simulated = false;
+            rb.isKinematic = true;
+        }
+
+        objetoCercanoRecogible = null;
+        ActualizarUI();
+    }
+
+
+
+    void SoltarObjeto()
+    {
+        if (objetoTransportado == null) return;
+
+        objetoTransportado.transform.SetParent(null);
+        objetoTransportado.transform.position = transform.position + Vector3.right;
+
+        if (objetoTransportado.TryGetComponent(out Collider2D col)) col.enabled = true;
+        if (objetoTransportado.TryGetComponent(out Rigidbody2D rb))
+        {
+            rb.simulated = true;
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        llevaObjeto = false;
+        objetoTransportado = null;
     }
 
     public void SoltarYDestruirObjeto()
     {
-        if (objetoTransportado != null)
-        {
-            Destroy(objetoTransportado);
-            objetoTransportado = null;
-            llevaObjeto = false;
-        }
+        if (!llevaObjeto || objetoTransportado == null) return;
+
+        Destroy(objetoTransportado);
+        objetoTransportado = null;
+        llevaObjeto = false;
     }
 
     public bool EstaLlevandoObjeto() => llevaObjeto;
-
-    private bool EsRecogible(string tag) => System.Array.Exists(tagsRecogibles, t => t == tag);
 
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, rango);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Suelo") || collision.collider.CompareTag("Piso"))
+        {
+            enSuelo = true;
+            animator.SetBool("isJumping", false);
+        }
+    }
+    private bool enSuelo = true;
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Tapete"))
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 10f);
+            animator.SetBool("isJumping", true);
+            enSuelo = false;
+        }
+
+        if (other.CompareTag("Silla"))
+        {
+            animator.SetBool("isTouchingObject", true);
+            sillaCercana = other.GetComponent<InteraccionSilla>();
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Silla"))
+        {
+            animator.SetBool("isTouchingObject", false);
+            sillaCercana = null;
+        }
     }
 }
