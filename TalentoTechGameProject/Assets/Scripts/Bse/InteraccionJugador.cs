@@ -14,19 +14,21 @@ public class InteraccionJugador : MonoBehaviour
     public LayerMask capaInteractuable;
     public KeyCode teclaInteraccion = KeyCode.E;
 
-    [Header("UI")]
-    public TextMeshProUGUI mensajeUI;
-
     private Rigidbody2D rb;
     private Animator animator;
     private Vector2 input;
     private ControladorEstados objetoInteractuable;
 
-    private InteraccionSilla sillaCercana;
     private bool estaDeslizandoEscalon = false;
     public float velocidadEscalon = 2f;
     public Vector2 direccionEscalon = new Vector2(1f, 1f).normalized;
     private bool enSuelo = true;
+
+    private GameObject objetoCercano;
+    private GameObject objetoTransportado;
+    private bool llevaObjeto = false;
+    public Transform puntoDeCarga;
+    [SerializeField] private string[] tagsRecogibles = { "Platos", "RopaSucia", "Tarea" };
 
     void Awake()
     {
@@ -36,7 +38,6 @@ public class InteraccionJugador : MonoBehaviour
 
     void Update()
     {
-        // Movimiento
         input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
         if (estaDeslizandoEscalon)
@@ -46,7 +47,6 @@ public class InteraccionJugador : MonoBehaviour
             return;
         }
 
-        // Flip de sprite
         if (input.x != 0)
         {
             Vector3 escala = transform.localScale;
@@ -54,29 +54,59 @@ public class InteraccionJugador : MonoBehaviour
             transform.localScale = escala;
         }
 
-        // Animaciones de caminar/correr
         bool corriendo = Input.GetKey(teclaCorrer);
         animator.SetBool("isRunning", corriendo && input != Vector2.zero);
         animator.SetBool("isWalking", !corriendo && input != Vector2.zero);
 
-        // Buscar objeto interactuable cercano
-        DetectarObjetoInteractuable();
-
-        // Interactuar
         if (Input.GetKeyDown(teclaInteraccion))
         {
-            if (objetoInteractuable != null)
+            if (llevaObjeto)
             {
-                objetoInteractuable.AlternarEstado();
-                ActualizarUI(); // Refrescar el texto tras el cambio
+                SoltarObjeto();
+                return;
             }
 
-            /*if (sillaCercana != null)
+            if (!llevaObjeto && objetoCercano != null && EsRecogible(objetoCercano.tag))
             {
-                sillaCercana.EjecutarAccion(gameObject);
-                Debug.Log("EjecutarAccion llamado desde el jugador");
-            }*/
+                llevaObjeto = true;
+                objetoTransportado = objetoCercano;
+                objetoTransportado.transform.SetParent(puntoDeCarga);
+                objetoTransportado.transform.localPosition = Vector3.zero;
+
+                Collider2D col = objetoTransportado.GetComponent<Collider2D>();
+                if (col != null) col.enabled = false;
+
+                Rigidbody2D rbItem = objetoTransportado.GetComponent<Rigidbody2D>();
+                if (rbItem != null) rbItem.simulated = false;
+                return;
+            }
+
+            if (objetoInteractuable != null)
+            {
+                float distancia = Vector2.Distance(transform.position, objetoInteractuable.transform.position);
+                if (distancia <= rango)
+                {
+                    objetoInteractuable.AlternarEstado();
+                }
+            }
         }
+    }
+
+    private void SoltarObjeto()
+    {
+        if (objetoTransportado == null) return;
+
+        objetoTransportado.transform.SetParent(null);
+        objetoTransportado.transform.position = transform.position + Vector3.right;
+
+        Collider2D col = objetoTransportado.GetComponent<Collider2D>();
+        if (col != null) col.enabled = true;
+
+        Rigidbody2D rbItem = objetoTransportado.GetComponent<Rigidbody2D>();
+        if (rbItem != null) rbItem.simulated = true;
+
+        llevaObjeto = false;
+        objetoTransportado = null;
     }
 
     void FixedUpdate()
@@ -86,97 +116,35 @@ public class InteraccionJugador : MonoBehaviour
         rb.linearVelocity = input.normalized * velocidadFinal;
     }
 
-    void DetectarObjetoInteractuable()
+    private bool EsRecogible(string tag)
     {
-        objetoInteractuable = null; // ¡Clave! Borra la referencia anterior
-
-        Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, rango, capaInteractuable);
-
-        foreach (var col in objetos)
+        foreach (string recogible in tagsRecogibles)
         {
-            var candidato = col.GetComponentInParent<ControladorEstados>();
-            if (candidato != null)
-            {
-                objetoInteractuable = candidato;
-                break;
-            }
+            if (tag == recogible) return true;
         }
-
-        ActualizarUI();
-    }
-
-    void ActualizarUI()
-    {
-        if (mensajeUI == null) return;
-
-        if (objetoInteractuable != null)
-        {
-            string nombre = objetoInteractuable.ObtenerNombreEstado();
-            //mensajeUI.text = $"Presiona {teclaInteraccion} para usar {nombre}";
-            mensajeUI.gameObject.SetActive(true);
-        }
-        else
-        {
-            mensajeUI.gameObject.SetActive(false);
-        }
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, rango);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Escalon"))
-        {
-            Vector3 nuevaPosicion = transform.position + new Vector3(0, 0.5f, 0); // Subir medio unidad (ajustá según el tamaño del escalón)
-            transform.position = nuevaPosicion;
-
-            animator.SetTrigger("Subir");
-            Debug.Log("Se desliza al subir el escalón");
-        }
-
-        if (collision.collider.CompareTag("Suelo") || collision.collider.CompareTag("Piso"))
-        {
-            enSuelo = true;
-            animator.SetBool("isJumping", false); // vuelve a estado normal
-        }
-        Debug.Log($"💥 Colisionó con: {collision.collider.name}, Tag: {collision.collider.tag}");
-
-        if (collision.collider.CompareTag("Suelo") || collision.collider.CompareTag("Piso"))
-        {
-            Debug.Log("✅ Detectado suelo correctamente → se desactiva salto");
-            animator.SetBool("isJumping", false);
-        }
-        else
-        {
-            Debug.Log("⚠️ No es suelo ni piso");
-        }
+        return false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Entró en trigger con: " + other.name);
+        ProcesarContacto(other);
 
-        if (other.CompareTag("Cama"))
-        {
-            animator.SetTrigger("Rodar");
-            Debug.Log("Entró en trigger con cama");
-        }
         if (other.CompareTag("Escalon"))
         {
             animator.SetTrigger("Subir");
-            Debug.Log("Entró en trigger con escalon");
             estaDeslizandoEscalon = true;
         }
+
         if (other.CompareTag("Tapete"))
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 10f); // ajustá la fuerza del salto
-            animator.SetBool("isJumping", true); // o SetTrigger("Salto") si usás trigger
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 10f);
+            animator.SetBool("isJumping", true);
             enSuelo = false;
-            Debug.Log("Tocó el tapete y saltó");
+        }
+
+        if (other.CompareTag("Silla"))
+        {
+            animator.SetBool("isTouchingObject", true);
         }
     }
 
@@ -185,7 +153,86 @@ public class InteraccionJugador : MonoBehaviour
         if (other.CompareTag("Escalon"))
         {
             estaDeslizandoEscalon = false;
-            Debug.Log("Salió del escalón");
+        }
+
+        if (other.CompareTag("Silla"))
+        {
+            animator.SetBool("isTouchingObject", false);
+        }
+
+        if (other.gameObject == objetoCercano)
+        {
+            objetoCercano = null;
+        }
+
+        if (other.GetComponentInParent<ControladorEstados>() == objetoInteractuable)
+        {
+            objetoInteractuable = null;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        ProcesarContacto(collision.collider);
+
+        if (collision.collider.CompareTag("Escalon"))
+        {
+            transform.position += new Vector3(0, 0.5f, 0);
+            animator.SetTrigger("Subir");
+        }
+
+        if (collision.collider.CompareTag("Suelo") || collision.collider.CompareTag("Piso"))
+        {
+            enSuelo = true;
+            animator.SetBool("isJumping", false);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.gameObject == objetoCercano)
+        {
+            objetoCercano = null;
+        }
+
+        if (collision.collider.GetComponentInParent<ControladorEstados>() == objetoInteractuable)
+        {
+            objetoInteractuable = null;
+        }
+    }
+
+    private void ProcesarContacto(Collider2D other)
+    {
+        if (EsRecogible(other.tag))
+        {
+            objetoCercano = other.gameObject;
+        }
+
+        var candidato = other.GetComponentInParent<ControladorEstados>();
+        if (candidato != null)
+        {
+            objetoInteractuable = candidato;
+            Debug.Log($"🟢 Detectado interactuable: {candidato.gameObject.name}");
+        }
+        else
+        {
+            Debug.Log($"⚠️ Sin ControladorEstados en: {other.name}");
+        }
+ 
+    }
+
+    public bool EstaLlevandoObjeto()
+    {
+        return llevaObjeto;
+    }
+
+    public void SoltarYDestruirObjeto()
+    {
+        if (llevaObjeto && objetoTransportado != null)
+        {
+            Destroy(objetoTransportado);
+            objetoTransportado = null;
+            llevaObjeto = false;
         }
     }
 }
