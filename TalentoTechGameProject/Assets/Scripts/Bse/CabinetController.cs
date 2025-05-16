@@ -76,11 +76,11 @@ public class CabinetController : MonoBehaviour
         {
             if (prefabPlatos == null)
             {
-                Debug.LogWarning("❌ No hay prefab de platos asignado.");
+                Debug.LogWarning("❌ Prefab de platos no asignado.");
                 return;
             }
 
-            Transform puntoCarga = jugador.transform.Find("PuntoCarga");
+            Transform puntoCarga = jugador.puntoDeCarga;
             if (puntoCarga == null)
             {
                 Debug.LogWarning("❌ No se encontró el punto de carga en el jugador.");
@@ -88,15 +88,18 @@ public class CabinetController : MonoBehaviour
             }
 
             GameObject nuevosPlatos = Instantiate(prefabPlatos, puntoCarga.position, Quaternion.identity);
+            Debug.Log("➡ Instanciando nuevos platos desde gabinete");
+
             jugador.RecogerObjeto(nuevosPlatos);
 
             estaLleno = false;
             if (estadoVacio != null) estadoVacio.SetActive(true);
             if (estadoLleno != null) estadoLleno.SetActive(false);
-
-            Debug.Log("✔ Platos recuperados del gabinete.");
         }
     }
+
+
+
 
     public string TagObjetoRequerido => tagObjetoRequerido;
     public GameObject PrefabPlatos => prefabPlatos;
