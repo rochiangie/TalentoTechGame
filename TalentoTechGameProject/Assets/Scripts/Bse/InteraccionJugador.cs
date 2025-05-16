@@ -37,6 +37,7 @@ public class InteraccionJugador : MonoBehaviour
     private GameObject objetoTransportado;
     private bool llevaObjeto = false;
     public GameObject ObjetoTransportado { get { return objetoTransportado; } }
+    [SerializeField] private Transform canvasFlotante;
 
     void Awake()
     {
@@ -63,6 +64,14 @@ public class InteraccionJugador : MonoBehaviour
             escala.x = Mathf.Sign(input.x) * Mathf.Abs(escala.x);
             transform.localScale = escala;
         }
+
+        if (canvasFlotante != null)
+        {
+            Vector3 escala = canvasFlotante.localScale;
+            escala.x = Mathf.Abs(escala.x); // aseguro que sea positiva
+            canvasFlotante.localScale = escala;
+        }
+
 
         // Animaciones de caminar/correr
         bool corriendo = Input.GetKey(teclaCorrer);
