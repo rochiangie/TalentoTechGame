@@ -35,7 +35,7 @@ public class InteraccionJugador : MonoBehaviour
     private GameObject objetoCercano;
     private GameObject objetoTransportado;
     private bool llevaObjeto = false;
-
+    public GameObject ObjetoTransportado { get { return objetoTransportado; } }
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
