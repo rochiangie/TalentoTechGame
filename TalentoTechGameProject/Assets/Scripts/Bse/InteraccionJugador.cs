@@ -33,6 +33,8 @@ public class InteraccionJugador : MonoBehaviour
     private bool llevaObjeto = false;
     public GameObject ObjetoTransportado => objetoTransportado;
     private GameObject objetoCercano;
+    private bool enSuelo = true;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -185,10 +187,9 @@ public class InteraccionJugador : MonoBehaviour
 
         if (srJugador != null && srObjeto != null)
         {
-            srObjeto.sortingLayerName = srJugador.sortingLayerName; // misma capa
-            srObjeto.sortingOrder = srJugador.sortingOrder + 1;     // encima del jugador
+            srObjeto.sortingLayerName = srJugador.sortingLayerName;
+            srObjeto.sortingOrder = srJugador.sortingOrder + 1;
         }
-
 
         Collider2D col = objetoTransportado.GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
@@ -203,8 +204,6 @@ public class InteraccionJugador : MonoBehaviour
         objetoCercanoRecogible = null;
         ActualizarUI();
     }
-
-
 
     void SoltarObjeto()
     {
@@ -256,6 +255,7 @@ public class InteraccionJugador : MonoBehaviour
             Debug.Log("Colisionó con: " + objetoCercano.name);
         }
     }
+
     private void OnCollisionExit2D(Collision2D collision)
     {
         GameObject raiz = collision.transform.root.gameObject;
@@ -266,8 +266,6 @@ public class InteraccionJugador : MonoBehaviour
             Debug.Log("Salió de la colisión");
         }
     }
-
-    private bool enSuelo = true;
 
     void OnTriggerEnter2D(Collider2D other)
     {
