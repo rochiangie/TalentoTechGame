@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\assets\\scripts\\bse\\cabinetcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\bse\\cabinetcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\assets\\scripts\\bse\\interaccionjugador.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\bse\\interaccionjugador.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|c:\\users\\rocio\\documents\\projects\\talentotechgame\\talentotechgameproject\\assets\\scripts\\bse\\controladorestados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\bse\\controladorestados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|c:\\users\\rocio\\documents\\projects\\talentotechgame\\talentotechgameproject\\assets\\scripts\\bse\\cabinetcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B64F9D0-E8D4-78AC-09BA-48D5277DEA08}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\bse\\cabinetcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,19 +27,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "ControladorEstados.cs",
+              "DocumentMoniker": "C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\Assets\\Scripts\\Bse\\ControladorEstados.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Bse\\ControladorEstados.cs",
+              "ToolTip": "C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\Assets\\Scripts\\Bse\\ControladorEstados.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Bse\\ControladorEstados.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAIwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-17T03:22:23.021Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "InteraccionJugador.cs",
               "DocumentMoniker": "C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\Assets\\Scripts\\Bse\\InteraccionJugador.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Bse\\InteraccionJugador.cs",
               "ToolTip": "C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\Assets\\Scripts\\Bse\\InteraccionJugador.cs",
               "RelativeToolTip": "Assets\\Scripts\\Bse\\InteraccionJugador.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAIwCcAAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAAgBAAAAAAAAAIAwwBgBAABhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-16T22:36:29.119Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "CabinetController.cs",
               "DocumentMoniker": "C:\\Users\\rocio\\Documents\\PROJECTS\\TalentoTechGame\\TalentoTechGameProject\\Assets\\Scripts\\Bse\\CabinetController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Bse\\CabinetController.cs",

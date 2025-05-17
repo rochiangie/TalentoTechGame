@@ -27,6 +27,9 @@ TagManager:
   - Piso
   - Cabinete
   - Platos
+  - Shift
+  - Shit2
+  - Agrandar
   layers:
   - Default
   - TransparentFX
