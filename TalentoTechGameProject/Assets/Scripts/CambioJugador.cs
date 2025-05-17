@@ -57,15 +57,10 @@ public class CambioJugador : MonoBehaviour
     private GameObject GetJugadorActivo()
     {
         GameObject[] jugadores = GameObject.FindGameObjectsWithTag(tagJugador);
-        if (jugadores.Length == 1)
-        {
-            return jugadores[0];
-        }
-        else
-        {
-            Debug.LogWarning($"[ADVERTENCIA] Se encontraron {jugadores.Length} objetos con tag 'Player'.");
-            return jugadores[0]; // o podés elegir otra estrategia
-        }
+        if (jugadores.Length == 1) return jugadores[0];
+
+        Debug.LogWarning($"[ADVERTENCIA] Se encontraron {jugadores.Length} objetos con tag 'Player'.");
+        return jugadores[0];
     }
 
     private IEnumerator ReemplazarJugador(GameObject jugadorActual, GameObject nuevoPrefab, Vector3 posicion)
