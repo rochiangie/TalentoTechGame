@@ -2866,7 +2866,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   teclaInteraccion: 101
-  mensajeUI: {fileID: 0}
+  mensajeUI: {fileID: 5056665381912007424, guid: 552c6a2341c48c34da0f9b7d315aafbd, type: 3}
   puntoDeCarga: {fileID: 0}
   tagsRecogibles:
   - Platos
