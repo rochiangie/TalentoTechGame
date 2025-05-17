@@ -24,6 +24,11 @@ public class CamaraSeguirJugador : MonoBehaviour
         transform.position = new Vector3(posicionSuavizada.x, posicionSuavizada.y, transform.position.z);
     }
 
+    public void EstablecerObjetivo(Transform nuevoObjetivo)
+    {
+        objetivo = nuevoObjetivo;
+    }
+
     void BuscarJugador()
     {
         GameObject jugador = GameObject.FindGameObjectWithTag("Player");
