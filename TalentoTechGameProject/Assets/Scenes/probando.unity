@@ -1870,7 +1870,7 @@ GameObject:
   - component: {fileID: 501613529}
   m_Layer: 0
   m_Name: Square (2)
-  m_TagString: Untagged
+  m_TagString: pared
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2295,7 +2295,7 @@ GameObject:
   - component: {fileID: 585395037}
   m_Layer: 0
   m_Name: Square (1)
-  m_TagString: Untagged
+  m_TagString: pared
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2414,7 +2414,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 3.19}
   m_EdgeRadius: 0
 --- !u!1001 &602624872
 PrefabInstance:
@@ -4625,11 +4625,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.5
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 9.06
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4672,9 +4672,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 368090fc51c804b4bab8ca9557a8a74b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objetivo: {fileID: 399238491}
-  suavizado: 0.15
   offset: {x: 0, y: 0, z: -10}
+  smoothSpeed: 0.1
 --- !u!114 &1128971960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6670,9 +6669,9 @@ GameObject:
   - component: {fileID: 1797588302}
   - component: {fileID: 1797588303}
   - component: {fileID: 1797588304}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Square (3)
-  m_TagString: Untagged
+  m_TagString: pared
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
