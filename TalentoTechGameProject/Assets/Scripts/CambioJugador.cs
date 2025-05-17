@@ -6,36 +6,28 @@ public class CambioJugador : MonoBehaviour
     [Header("Prefabs de Jugador")]
     public GameObject prefabConGravedad;
     public GameObject prefabSinGravedad;
-    public GameObject prefabOriginal;
 
     [Header("Puntos de Aparición")]
     public Transform apareceAqui;
     public Transform aparecerAqui;
     public Transform aparicionFinal;
-    public Transform puntoDeAparicion;
 
-    [Header("Configuración")]
     public string tagJugador = "Player";
+
+    [Header("Prefab del jugador original")]
+    public GameObject prefabOriginal;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag(tagJugador)) return;
 
-        GameObject jugador = GetJugadorActivo();
+        GameObject jugador = GetJugadorActivo(); // Aseguramos que sea el único jugador
+
         if (jugador == null) return;
 
         string tagTrigger = gameObject.tag;
         string nombreActual = jugador.name;
 
-        // Transición especial: PlayerSinGravedad → Player original
-        if (nombreActual.Contains("SinGravedad") && tagTrigger == "Agrandar")
-        {
-            Vector3 spawnPos = puntoDeAparicion != null ? puntoDeAparicion.position : transform.position;
-            StartCoroutine(ReemplazarJugador(jugador, prefabOriginal, spawnPos));
-            return;
-        }
-
-        // Lógica para triggers específicos
         if (tagTrigger == "Shit2")
         {
             if (nombreActual.Contains("SinGravedad"))
@@ -47,6 +39,7 @@ public class CambioJugador : MonoBehaviour
         {
             StartCoroutine(ReemplazarJugador(jugador, prefabOriginal, aparicionFinal.position));
         }
+
         else if (tagTrigger == "Agrandar")
         {
             if (!nombreActual.Contains("ConGravedad") && !nombreActual.Contains("SinGravedad"))
@@ -54,6 +47,7 @@ public class CambioJugador : MonoBehaviour
         }
     }
 
+    // ✅ Obtiene el único jugador activo con el tag "Player"
     private GameObject GetJugadorActivo()
     {
         GameObject[] jugadores = GameObject.FindGameObjectsWithTag(tagJugador);
@@ -64,10 +58,12 @@ public class CambioJugador : MonoBehaviour
         else
         {
             Debug.LogWarning($"[ADVERTENCIA] Se encontraron {jugadores.Length} objetos con tag 'Player'.");
-            return jugadores[0]; // o podés elegir otra estrategia
+            // Devuelve el primero, pero podrías forzar destrucción de todos excepto uno si querés.
+            return jugadores[0];
         }
     }
 
+    // ✅ Reemplaza al jugador actual y ajusta cámara
     private IEnumerator ReemplazarJugador(GameObject jugadorActual, GameObject nuevoPrefab, Vector3 posicion)
     {
         Debug.Log($"[DEBUG] Reemplazando a: {jugadorActual.name}");
