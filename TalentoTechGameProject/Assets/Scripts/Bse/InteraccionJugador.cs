@@ -32,7 +32,7 @@ public class InteraccionJugador : MonoBehaviour
     private GameObject objetoTransportado;
     private bool llevaObjeto = false;
     public GameObject ObjetoTransportado => objetoTransportado;
-
+    private GameObject objetoCercano;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -243,12 +243,30 @@ public class InteraccionJugador : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        GameObject raiz = collision.transform.root.gameObject;
+
         if (collision.collider.CompareTag("Suelo") || collision.collider.CompareTag("Piso"))
         {
             enSuelo = true;
             animator.SetBool("isJumping", false);
         }
+        if (collision.collider.CompareTag("Inodoro") || collision.collider.CompareTag("Lavamanos") || collision.collider.CompareTag("Bañera"))
+        {
+            objetoCercano = collision.gameObject;
+            Debug.Log("Colisionó con: " + objetoCercano.name);
+        }
     }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        GameObject raiz = collision.transform.root.gameObject;
+
+        if (collision.gameObject == objetoCercano)
+        {
+            objetoCercano = null;
+            Debug.Log("Salió de la colisión");
+        }
+    }
+
     private bool enSuelo = true;
 
     void OnTriggerEnter2D(Collider2D other)
@@ -258,6 +276,12 @@ public class InteraccionJugador : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, 10f);
             animator.SetBool("isJumping", true);
             enSuelo = false;
+        }
+
+        if (other.CompareTag("Inodoro") || other.CompareTag("Lavamanos") || other.CompareTag("Bañera"))
+        {
+            objetoCercano = other.gameObject;
+            Debug.Log("Objeto cercano: " + objetoCercano.name);
         }
 
         if (other.CompareTag("Silla"))
@@ -273,6 +297,12 @@ public class InteraccionJugador : MonoBehaviour
         {
             animator.SetBool("isTouchingObject", false);
             sillaCercana = null;
+        }
+
+        if (other.gameObject == objetoCercano)
+        {
+            objetoCercano = null;
+            Debug.Log("Objeto salió de alcance");
         }
     }
 }
