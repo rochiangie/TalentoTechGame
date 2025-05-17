@@ -25,8 +25,13 @@ public class CamaraSeguirJugador : MonoBehaviour
         transform.position = new Vector3(posicionSuavizada.x, posicionSuavizada.y, transform.position.z);
     }
 
+    /// <summary>
+    /// Cambia dinámicamente el objetivo de la cámara.
+    /// </summary>
+    /// <param name="nuevoObjetivo">Transform del nuevo jugador a seguir.</param>
     public void EstablecerObjetivo(Transform nuevoObjetivo)
     {
         objetivo = nuevoObjetivo;
+        Debug.Log("[Cámara] Nuevo objetivo establecido: " + nuevoObjetivo.name);
     }
 }
