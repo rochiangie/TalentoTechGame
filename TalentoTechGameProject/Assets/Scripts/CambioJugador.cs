@@ -14,6 +14,9 @@ public class CambioJugador : MonoBehaviour
 
     public string tagJugador = "Player";
 
+    [Header("Prefab del jugador original")]
+    public GameObject prefabOriginal;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag(tagJugador)) return;
@@ -34,8 +37,9 @@ public class CambioJugador : MonoBehaviour
         }
         else if (tagTrigger == "Shift")
         {
-            StartCoroutine(ReemplazarJugador(jugador, prefabSinGravedad, aparicionFinal.position));
+            StartCoroutine(ReemplazarJugador(jugador, prefabOriginal, aparicionFinal.position));
         }
+
         else if (tagTrigger == "Agrandar")
         {
             if (!nombreActual.Contains("ConGravedad") && !nombreActual.Contains("SinGravedad"))
@@ -79,7 +83,6 @@ public class CambioJugador : MonoBehaviour
             {
                 seguir.EstablecerObjetivo(nuevoJugador.transform);
 
-                // Zoom + offset dinámico
                 if (nuevoJugador.name.Contains("SinGravedad") || nuevoJugador.name.Contains("ConGravedad"))
                 {
                     camara.orthographicSize = 18f;
@@ -90,7 +93,7 @@ public class CambioJugador : MonoBehaviour
                 {
                     camara.orthographicSize = 10f;
                     seguir.offset = new Vector3(0, 1.5f, -10);
-                    Debug.Log("[DEBUG] Cámara restaurada para jugador inicial");
+                    Debug.Log("[DEBUG] Cámara restaurada para jugador original");
                 }
             }
         }
